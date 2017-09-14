@@ -2,21 +2,20 @@
 layout: docs-default
 ---
 
-# Token Revocation
+# 令牌撤销 (Token Revocation)
 
-This endpoint allows revoking access tokens (reference tokens only) and refresh token.
-It implements the token revocation specification ([RFC 7009](https://tools.ietf.org/html/rfc7009)).
+这个端点可以撤销访问令牌（仅参考令牌）和刷新令牌。它实现了令牌撤销规范 ([RFC 7009](https://tools.ietf.org/html/rfc7009)) 。
 
-Supported parameters:
+### 支持的参数 (Supported parameters)
 
-* `token` (required)
-    * the token to revoke
+* `token` （必选）
+    * 待撤销的令牌
 * `token_type_hint`
-    * either `access_token` or `refresh_token`
+    * `access_token` 或者 `refresh_token`
 
-Requests must be authenticated using one of the supported client authentication methods.
+请求必须经过其中一个受支持的客户端认证方法认证。
 
-Example:
+### 示例 (Example)
 
 ```
 POST /connect/revocation HTTP/1.1
