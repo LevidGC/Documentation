@@ -2,14 +2,13 @@
 layout: docs-default
 ---
 
-# Identity Token Validation Endpoint
+# 身份令牌验证端点 (Identity Token Validation Endpoint)
 
-The identity token validation endpoint can be used to validate identity tokens. 
-This is useful for clients that don't have access to the appropriate JWT or crypto libraries (e.g. JavaScript).
+身份令牌验证端点可用于验证身份令牌。这对于无法访问适当的 JWT 或加密库的客户端来说，是非常有用的（比如，JavaScript）。
 
-You can either GET or POST to the validation endpoint. Due to query string size restrictions, POST is recommended.
+你可以使用 GET 或者 POST 请求来访问验证端点。由于查询字符串大小有限制，所以推荐使用 POST 请求。
 
-### Example
+### 示例 (Example)
 
 ```
 POST /connect/identitytokenvalidation
@@ -22,9 +21,9 @@ client_id=<expected_client_id>
 GET /connect/identitytokenvalidation?token=<token>&client_id=<expected_client_id>
 ```
 
-A successful response will return a status code of 200 and the associated claims for the token. An unsuccessful response will return a 400 with an error message.
+成功的响应将会返回 200 状态码以及与令牌关联的声明 (claims) 。失败的响应将会返回 400 状态码以及一个错误消息。
 
-```
+```json
 {
   "nonce": "nonce",
   "iat": "1413203421",
