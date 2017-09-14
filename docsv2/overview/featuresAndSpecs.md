@@ -2,9 +2,9 @@
 layout: docs-default
 ---
 
-# Features and Specifications
+# 特性和规范 (Features and Specifications)
 
-IdentityServer implements the following specifications:
+IdentityServer 实现了以下的规范：
 
 * OpenID Connect Core 1.0 ([spec](http://openid.net/specs/openid-connect-core-1_0.html))
     * basic, implicit and hybrid flows
