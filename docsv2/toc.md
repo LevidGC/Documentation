@@ -4,22 +4,22 @@ title: latest version
 permalink: /docsv2/
 ---
 
-### Overview
+### 概览 (Overview)
 
 * [The big Picture](overview/bigPicture.html)
-* [High level Features](overview/highLevelFeatures.html)
-* [Terminology](overview/terminology.html)
-* [Features and Specifications](overview/featuresAndSpecs.html)
-* [Packaging](overview/packaging.html)
-* [Getting Started: Creating the simplest OAuth2 Authorization Server, Client and API](overview/simplestOAuth.html)
-* [Getting Started: MVC Authentication & Web APIs](overview/mvcGettingStarted.html)
-* [Getting Started: JS Authentication & Web APIs](overview/jsGettingStarted.html)
+* [高级特性 (High level Features)](overview/highLevelFeatures.html)
+* [术语 (Terminology)](overview/terminology.html)
+* [特性和规范 (Features and Specifications)](overview/featuresAndSpecs.html)
+* [包 (Packaging)](overview/packaging.html)
+* [起步：创建最简单的 OAuth2 授权服务器，客户端和 API (Getting Started: Creating the simplest OAuth2 Authorization Server, Client and API)](overview/simplestOAuth.html)
+* [起步：MVC 认证 & Web API (Getting Started: MVC Authentication & Web APIs)](overview/mvcGettingStarted.html)
+* [起步：JS 认证 & Web API (Getting Started: JS Authentication & Web APIs)](overview/jsGettingStarted.html)
 
-### Configuration
+### 配置 (Configuration)
 
-* [Overview](configuration/overview.html)
-* [Options](configuration/identityServerOptions.html)
-* [Service Factory](configuration/serviceFactory.html)
+* [概览 (Overview)](configuration/overview.html)
+* [选项 (Options)](configuration/identityServerOptions.html)
+* [服务工厂 (Service Factory)](configuration/serviceFactory.html)
 * [In-Memory Services and Stores](configuration/inMemory.html)
 * [Clients](configuration/clients.html)
 * [Scopes and Claims](configuration/scopesAndClaims.html)
@@ -32,18 +32,18 @@ permalink: /docsv2/
 * [Logging](configuration/logging.html)
 * [Events](configuration/events.html)
 
-### Endpoints
+### 端点 (Endpoints)
 
-* [Authorization/Authentication](endpoints/authorization.html)
-* [Token](endpoints/token.html)
+* [授权/验证 (Authorization/Authentication)](endpoints/authorization.html)
+* [令牌 (Token)](endpoints/token.html)
 * [UserInfo](endpoints/userinfo.html)
 * [Discovery](endpoints/discovery.html)
-* [Logout](endpoints/endSession.html)
-* [Token Revocation](endpoints/revocation.html)
-* [Token Introspection](endpoints/introspection.html)
-* [Access Token Validation](endpoints/accessTokenValidation.html)
-* [Identity Token Validation](endpoints/identityTokenValidation.html)
-* [CSP Error Report](endpoints/csp.html)
+* [登出 (Logout)](endpoints/endSession.html)
+* [令牌撤销 (Token Revocation)](endpoints/revocation.html)
+* [令牌自省 (Token Introspection)](endpoints/introspection.html)
+* [访问令牌验证 (Access Token Validation)](endpoints/accessTokenValidation.html)
+* [身份令牌验证 (Identity Token Validation)](endpoints/identityTokenValidation.html)
+* [CSP 错误报告 (CSP Error Report)](endpoints/csp.html)
 
 ### Advanced
 
