@@ -2,21 +2,19 @@
 layout: docs-default
 ---
 
-# Logout Endpoint
+# 登出端点 (Logout Endpoint)
 
-Redirecting to the logout endpoint clears the authentication session and cookie.
+重定向到登出端点将会清除掉认证会话和 cookie 。
 
-You can pass the following optional parameters to the endpoint:
+你可以将以下的可选参数传递给此端点：
 
 * `id_token_hint`
-    * The id_token that the client acquired during authentication.
-     This allows bypassing the logout confirmation screen as well as providing a post logout redirect URL
+    * 认证期间客户端获取到的 `id_token` 。提供 post logout 重定向 URL 可以允许绕过登出确认屏幕。
 * `post_logout_redirect_uri`
-    * A URI that IdentityServer can redirect to after logout (by default a link is displayed). The URI must be in the list of allowed post logout URIs for the client.
-
+    * 登出之后 IdentityServer 可以重定向的 URL （默认情况会展示一个链接）。这个 URL 必须在客户端注册的允许的 post logout URL 列表中。
 
 ```
 /connect/endsession?id_token_hint=...&post_logout_redirect_uri=https://myapp.com
 ```
 
-See the [AuthenticationOptions](../configuration/authenticationOptions.html) for configuring the behavior of the logout endpoint and logout page.
+参见 [AuthenticationOptions](../configuration/authenticationOptions.html) 获取更多关于登出端点和登出页面的配置。
