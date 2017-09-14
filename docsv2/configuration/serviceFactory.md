@@ -2,72 +2,69 @@
 layout: docs-default
 ---
 
-# Service Factory
+# 服务工厂 (Service Factory)
 
-IdentityServer3 contains many features for implementing OpenID Connect and OAuth2. Many of these features have been designed so they can be replaced. This would be useful for the scenarios where the default logic doesn’t match the hosting application’s requirements, or simply the application wishes to provide an entirely different implementation. And in fact, there are some extensibility points within IdentityServer3 that are required to be provided by the hosting application (such as the storage for configuration data or the identity management implementation for validating users’ credentials).
+IdentityServer3 有许多特性用来实现 OpenID Connect 和 OAuth2 。许多特性都已经设计好了，也可以被替换掉。当默认的逻辑没法满足宿主应用程序的需求时这非常有用，或者简单点说，应用程序想要提供一个完全不同的实现。事实上，IdentityServer3 中有一些扩展点需要宿主应用程序来提供（比如配置数据的存储或者用于验证用户凭据的身份管理的实现）。
 
-The `IdentityServer3.Core.Configuration.IdentityServerServiceFactory` holds all these building blocks and must be supplied at startup time using the `IdentityServerOptions` class (see [here](http://identityserver.github.io/Documentation/docsv2/configuration/identityServerOptions.html) for more information on configuration options).
+`IdentityServer3.Core.Configuration.IdentityServerServiceFactory` 拥有所有的这些构建块，而且必须在 startup 阶段通过 `IdentityServerOptions` 类来提供（参见 [这里](http://identityserver.github.io/Documentation/docsv2/configuration/identityServerOptions.html) 获取更多关于配置选项的信息）。
 
-The extensibility points fall into three categories.
+扩展点有以下三类。
 
-## Mandatory
+## 强制实现 (Mandatory)
 
 * `UserService`
-    * Implements user authentication against the local user store, association of external users, claims retrieval and sign-out logic.
-    There are two standard implementations for [MembershipReboot](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.MembershipReboot)
-    and [ASP.NET Identity](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.AspNetIdentity)
+    * 实现结合本地用户仓储，外部用户，声明的检索和登出逻辑来实现用户验证。 [MembershipReboot](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.MembershipReboot) 和 [ASP.NET Identity](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.AspNetIdentity) 都有默认的实现
 * `ScopeStore`
-    * Implements retrieval of scopes configuration data
+    * 实现域配置数据的检索
 * `ClientStore`
-    * Implements retrieval of client configuration data
+    * 实现客户端配置数据的检索
 
-The `IdentityServerServiceFactory` allows setting up a service factory by providing in-memory stores for users, clients and scopes (see [here](inMemory.html)).
+`IdentityServerServiceFactory` 允许建立一个服务工厂来提供用户，客户端和域的 in-memory 仓储（参见 [这里](inMemory.html)）。
 
-## Mandatory for production scenarios (but with default in-memory implementations)
+## 生产场景强制实现（但是有默认的 in-memory 实现） (Mandatory for production scenarios (but with default in-memory implementations))
 
 * `AuthorizationCodeStore`
-    * Implements storage and retrieval of authorization codes ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FITransientDataRepository.cs))
+    * 实现授权码的存储和检索 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FITransientDataRepository.cs))
 * `TokenHandleStore` 
-    * Implements storage and retrieval of handles for reference tokens ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FITransientDataRepository.cs))
+    * 实现参考令牌的存储和检索 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FITransientDataRepository.cs))
 * `RefreshTokenStore` 
-    * Implements storage and retrieval of refresh tokens ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FITransientDataRepository.cs))
+    * 实现刷新令牌的存储和检索 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FITransientDataRepository.cs))
 * `ConsentStore` 
-    * Implements storage and retrieval of consent decisions ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source/Core/Services/IConsentStore.cs))
+    * 实现 consent decisions 的存储和检索 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source/Core/Services/IConsentStore.cs))
 * `ViewService`
-    * Implements retrieval of UI assets. Defaults to using the embedded assets. ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FIViewService.cs))
+    * 实现 UI 资产的检索，默认使用嵌入式资产 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FIViewService.cs))
 
-## Optional (can be replaced, but have default implementations)
+## 可选（可以被替换，但是有默认的实现） (Optional (can be replaced, but have default implementations))
 
 * `TokenService`
-    * Implements creation of identity and access tokens ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FITokenService.cs))
+    * 实现身份和访问令牌的创建 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FITokenService.cs))
 * `ClaimsProvider`
-    * Implements retrieval of claims for identity and access tokens ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FIClaimsProvider.cs))
+    * 实现身份和访问令牌的声明的检索 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FIClaimsProvider.cs))
 * `TokenSigningService`
-    * Implements creation and signing of security tokens ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FITokenSigningService.cs))
+    * 实现安全令牌签名的创建 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FITokenSigningService.cs))
 * `CustomGrantValidator`
-    * Implements validation of custom grant types ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FICustomGrantValidator.cs))
+    * 实现自定义许可类型的验证 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FICustomGrantValidator.cs))
 * `CustomRequestValidator`
-    * Implements custom additional validation of authorize and token requests ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FICustomRequestValidator.cs))
+    * 为授权和令牌的请求实现额外的自定义验证 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FICustomRequestValidator.cs))
 * `RefreshTokenService`
-    * Implements creation and updates of refresh tokens ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FIRefreshTokenService.cs))
+    * 实现刷新令牌的创建和更新 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FIRefreshTokenService.cs))
 * `ExternalClaimsFilter`
-    * Implements filtering and transformation of claims for external identity providers ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FIExternalClaimsFilter.cs))
+    * 实现外部身份提供商的声明的过滤和转换 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FIExternalClaimsFilter.cs))
 * `CustomTokenValidator`
-    * Implements custom additional validation of tokens for the token validation endpoints ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FICustomTokenValidator.cs))
+    * 为令牌验证端点实现自定义额外的令牌验证 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FICustomTokenValidator.cs))
 * `CustomTokenResponseGenerator`
-    * Allows adding additional data to a token response [interface](https://github.com/IdentityServer/IdentityServer3/blob/dev/source/Core/Services/ICustomTokenResponseGenerator.cs)
+    * 在令牌响应中添加额外的数据 [接口](https://github.com/IdentityServer/IdentityServer3/blob/dev/source/Core/Services/ICustomTokenResponseGenerator.cs)
 * `ConsentService` 
-    * Implements logic of consent decisions ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source/Core/Services/IConsentService.cs))
+    * 实现同意 (consent) 选择的逻辑 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source/Core/Services/IConsentService.cs))
 * `ClientPermissionsService`
-    * Implements retrieval and revocation of consents, reference and refresh tokens ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FIClientPermissionsService.cs))
+    * 实现 consents ，参考和刷新令牌的检索和撤销 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FIClientPermissionsService.cs))
 * `EventService`
-    * Implements forwarding events to some logging system (e.g. elastic search) ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FIEventService.cs))
+    * 实现将事件转发到某个日志系统（比如，弹性搜索） ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FIEventService.cs))
 * `RedirectUriValidator`
-    * Implements validation of redirect and post logout URIs ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FIRedirectUriValidator.cs))
+    * 实现重定向和 post logout URIs 验证 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FIRedirectUriValidator.cs))
 * `LocalizationService`
-    * Implements localization of display strings ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FILocalizationService.cs))
+    * 实现本地化字符串显示 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FILocalizationService.cs))
 * `CorsPolicyService`
-    * Implements CORS policy ([interface](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FICorsPolicyService.cs))
+    * 实现 CORS 规则 ([接口](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FServices%2FICorsPolicyService.cs))
 
-
-See [here](../advanced/customServices.html) for more information on registering your custom service and store implementations.
+参见 [这里](../advanced/customServices.html) 获取更多关于注册自定义服务和仓储实现的信息。
