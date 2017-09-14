@@ -21,7 +21,7 @@ permalink: /docsv2/
 * [选项 (Options)](configuration/identityServerOptions.html)
 * [服务工厂 (Service Factory)](configuration/serviceFactory.html)
 * [驻内存服务和仓储 (In-Memory Services and Stores)](configuration/inMemory.html)
-* [Clients](configuration/clients.html)
+* [客户端 (Clients)](configuration/clients.html)
 * [Scopes and Claims](configuration/scopesAndClaims.html)
 * [Secrets](configuration/secrets.html)
 * [Keys, Signatures and Cryptography](configuration/crypto.html)
