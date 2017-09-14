@@ -2,41 +2,39 @@
 layout: docs-default
 ---
 
-# IdentityServer Options
+# IdentityServer 选项 (IdentityServer Options)
 
-The `IdentityServerOptions` [class](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FConfiguration%2FIdentityServerOptions.cs) is the top level container for all configuration settings of IdentityServer.
+ `IdentityServerOptions` [类](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/blob/master/source%2FCore%2FConfiguration%2FIdentityServerOptions.cs) 是 IdentityServer 所有配置设置的顶层容器。
 
 * `IssuerUri`
-    * Unique name of this server instance, e.g. https://myissuer.com. Defaults to the base URL where IdentityServer is installed
+    * server 实例的唯一名称，比如：https://myissuer.com 。默认值就是 IdentityServer 安装的 server 的基 URL 。
 * `SiteName`
-    * Display name of the site used in standard views.
+    * 在标准视图中会使用到，用于展示站点的名称。
 * `SigningCertificate`
-    * X.509 certificate (and corresponding private key) for signing security tokens.
+    * X.509 证书（包括对应的私钥），用于签署安全令牌。
 * `SecondarySigningCertificate`
-    * A secondary certificate that will appear in the discovery document. Can be used to prepare clients for certificate rollover.
+    * 出现在 discovery 文档中的二级证书。用于为客户端准备证书翻转 (certificate rollover) 。
 * `RequireSsl`
-    * Indicates if SSL is required for IdentityServer. Defaults to `true`.
+    * 指示 IdentityServer 是否需要 SSL 。默认值为 `true`
 * `PublicOrigin`
-    * By default, IdentityServer uses the host, protocol, and port from the HTTP request when creating links.
-    This might not be accurate in reverse proxy or load-balancing situations.
-    You can override the origin used for link generation using this property.
+    * 默认情况下，IdentityServer 会使用 HTTP 请求的 host，protocol 和 port 来创建链接。但是在使用反向代理或者负载均衡的情况下这并不准确。所以可以为链接的生成来重写这个属性。
 * `Endpoints`
-    * Allows enabling or disabling specific endpoints (by default all endpoints are enabled).
+    * 启用或者禁用相关端点（默认情况下所有端点都是启用的）
 * `Factory` (required)
-    * Sets the [IdentityServerFactory](serviceFactory.html)
+    * 设置 [IdentityServerFactory](serviceFactory.html)
 * `DataProtector`
-    * Sets a custom data protector. By default the Katana host data protector is used.
+    * 设置自定义数据保护器 (data protector) 。默认为 Katana 宿主数据保护器 (Katana host data protector) 。
 * `AuthenticationOptions`
-    * Configures [AuthenticationOptions](authenticationOptions.html)
+    * 配置 [AuthenticationOptions](authenticationOptions.html)
 * `PluginConfiguration`
-    * Allows adding protocol plugins like the WS-Federation support.
+    * 添加协议插件，比如添加对 WS-Federation 的支持
 * `CspOptions`
-    * Configures [CSP](../advanced/csp.html)
+    * 配置 [CSP](../advanced/csp.html)
 * `ProtocolLogoutUrls`
-    * Configures callback URLs that should be called during logouts (mainly useful for protocol plugins).
+    * 配置登出环节需要访问的回调 URLs （主要用于协议插件）
 * `LoggingOptions`
-    * Configures settings related to [logging](logging.html)
+    * 配置与 [logging](logging.html) 相关的设置
 * `EventsOptions`
-    * Configures settings related to [events](events.html)
+    * 配置与 [events](events.html) 相关的设置
 * `EnableWelcomePage`
-    * Enables or disables the default welcome page. Defaults to `true`.
+    * 启用或禁用默认的欢迎页面。默认为 `true`。
