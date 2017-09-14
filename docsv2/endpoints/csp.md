@@ -2,8 +2,8 @@
 layout: docs-default
 ---
 
-# CSP Endpoint
+# CSP 端点 (CSP Endpoint)
 
-[CSP](../advanced/csp.html) allows for a reporting endpoint to be configured. IdentityServer provides an endpoint to record CSP errors that the browser reports. These CSP errors will be raised as [events](../configuration/events.html) in the eventing system.
+[CSP](../advanced/csp.html) 允许配置一个报告端点 (reporting endpoint) 。IdentityServer 提供了一个端点来记录浏览器报告的 CSP 错误。CSP 错误可以在事件系统 (eventing system) 中以 [events](../configuration/events.html) 的形式抛起。
 
-The CSP reporting feature can disabled by setting the `EnableCspReportEndpoint` property to `false` on the `EndpointOptions` which is a property of the [`IdentityServerOptions`](../configuration/identityServerOptions.html).
+CSP 报告特性可以通过将 `EndpointOptions` 中的 `EnableCspReportEndpoint` 属性设置为 `false` 来禁用，它是 [`IdentityServerOptions`](../configuration/identityServerOptions.html) 的属性。
