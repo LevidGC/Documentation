@@ -1,14 +1,17 @@
-Documentation for IdentityServer3
+IdentityServer3 文档（译文）
 ============================================
 
-site: https://identityserver.github.io/Documentation/
+> 个人翻译，不代表官方意图。
 
-## How to Build
-This assumes you already have Ruby and [Bundler](http://bundler.io/) installed.
+站点：https://identityserver.github.io/Documentation/
 
-* Navigate to the project's source code
-* Run `bundle install` to install the required modules
-* Modify the _config.yml file to change the URL to `url: http://localhost:4000`
- * This will allow the relative links to work as expected.
- * **NOTE:** Do not commit this change.
-* Run `bundle exec jekyll serve` to serve the web site.
+## 如何构建
+
+假设你已经安装了 Ruby 和 [Bundler](http://bundler.io/) 。
+
+* 导航到项目源码目录
+* 运行 `bundle install` 来安装必备的模块
+* 修改 _config.yml 文件，将 URL 更改为 `url: http://localhost:4000`
+ * 这将确保相对链接按预期工作
+ * **注意:** 不要提交任何更改
+* 运行 `bundle exec jekyll serve` 启动 Web 站点
