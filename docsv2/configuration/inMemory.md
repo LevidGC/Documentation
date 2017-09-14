@@ -2,16 +2,15 @@
 layout: docs-default
 ---
 
-# In-Memory Services and Stores
+# 驻内存服务和仓储 (In-Memory Services and Stores)
 
-The in-memory services and stores are an easy way to get a test/dev version of IdentityServer up and running.
+驻内存服务和仓储可以很简单地让你的测试/开发版 IdentityServer 上线运行。
 
-If not specifically configured we will always provide an in-memory version stores for authorization codes, consent, 
-reference and refresh tokens.
+如果没有针对性地进行配置，我们会为授权码，consent ，引用和刷新令牌提供驻内存版本的仓储。
 
-For clients, stores and users you need to supply a static list of `Client`, `Scope` and `InMemoryUser`.
+对于客户端，仓储和用户，你需要提供一个 `Client` ，`Scope` 和 `InMemoryUser` 静态列表。
 
-**This is only suitable for testing and development.**
+**这只适用于测试和开发。**
 
 ```csharp
 var factory = new IdentityServerServiceFactory()
