@@ -2,51 +2,58 @@
 layout: docs-default
 ---
 
-This tutorial walks you through the necessary steps to integrate IdentityServer in a JS application.
-Since all the steps will be done on the client side, we'll use a JS library, [oidc-client-js](https://github.com/IdentityModel/oidc-client-js), to help with tasks like obtaining and validating tokens.
+本教程带你过一遍在 JS 应用中集成 IdentityServer 所要的必需步骤。
 
-You can find the code associated with this walkthrough [here](https://github.com/IdentityServer/IdentityServer3.Samples/tree/master/source/JavaScript%20Walkthrough).
+由于所有的步骤都在客户端完成，我们需要一个 JS 类库，[oidc-client-js](https://github.com/IdentityModel/oidc-client-js), 来帮助我们完成类似获取和验证令牌的过程。
 
-The walkthrough is split in 3 parts:
+你可以在 [这里](https://github.com/IdentityServer/IdentityServer3.Samples/tree/master/source/JavaScript%20Walkthrough) 找到与本教程相关联的代码。
 
- - Authenticate against IdentityServer in the JS application
- - Make API calls from the JS application
- - Have a look at how to renew tokens, log out and check sessions
+本教程被分为以下三个部分：
 
-# Part 1 - Authentication against IdentityServer
-This first part will focus on allowing us to authenticate in the JS application. To do so, we will create 2 projects; one for the JS application and one for IdentityServer.
+ - 在 JS 应用中结合 IdentityServer 进行认证
+ - 从 JS 应用中发起 API 调用
+ - 了解怎么更新令牌，登出以及检查会话。
 
-## Create the JS application project
-In Visual Studio, create an empty web application.
+# 第一部分——结合 IdentityServer 进行认证 (Part 1 - Authentication against IdentityServer)
+
+第一部分关注于怎么在 JS 应用中进行认证。想要完成这一部分，我们将会创建两个项目；一个是 JS 应用，另一个是 IdentityServer。
+
+## 创建 JS 应用项目 (Create the JS application project)
+
+在 Visual Studio 中创建一个空 Web 项目。
 
 ![create js app](https://cloud.githubusercontent.com/assets/6102639/12247759/9563a71a-b909-11e5-9823-6ba598b74bad.png)
 
-Note the URL assigned to the project:
+注意项目设置的 URL：
 
 ![js app url](https://cloud.githubusercontent.com/assets/6102639/12252652/4324b3b2-b92d-11e5-9641-772efe43c8e8.png)
 
-## Create the IdentityServer project
-In Visual Studio, create another empty web application for IdentityServer.
+## 创建 IdentityServer 项目 (Create the IdentityServer project)
+
+在 Visual Studio 中，为 IdentityServer 创建一个空的 Web 应用。
 
 ![create web app](https://cloud.githubusercontent.com/assets/6102639/12247585/bd0e33e4-b908-11e5-90bb-b6f3e9b2c060.png)
 
-You can switch the project now to SSL using the properties window:
+现在，你可以使用属性窗口将项目切换到 SSL 。
 
 ![set ssl](https://cloud.githubusercontent.com/assets/6102639/12252653/43288fc8-b92d-11e5-93eb-25821a64ceb2.png)
 
-**Important**
-Don't forget to update the start URL in your project properties so that it reflects the HTTPS url of the project.
+**重要**
 
-## Adding IdentityServer
-IdentityServer is based on OWIN/Katana and distributed as a NuGet package. To add it to the newly created web host, install the following two packages:
+不要忘记在项目属性中更新起始 URL ，它可以反应项目的 HTTPS URL 。
+
+## 添加 IdentityServer (Adding IdentityServer)
+
+IdentityServer 是基于 OWIN/Katana 的并且作为 Nuget 包发布。想要将其添加到刚刚创建的 Web 宿主中，安装如下的两个包：
 
 ````
 Install-Package Microsoft.Owin.Host.SystemWeb -ProjectName IdentityServer
 Install-Package IdentityServer3 -ProjectName IdentityServer
 ````
 
-## Configuring IdentityServer - Clients
-IdentityServer needs some information about the clients it is going to support, this can be easily achieved by supplying a collection of `Client` objects:
+## 配置 IdentityServer ——客户端 (Configuring IdentityServer - Clients)
+
+IdentityServer 需要知道它将要支持的客户端的一些信息，这很容易实现，只需要提供一个 `Client` 对象的集合：
 
 ```csharp
 public static class Clients
@@ -79,13 +86,13 @@ public static class Clients
 }
 ```
 
-A special setting here is the `AllowedCorsOrigins` property. This allows IdentityServer to only accept browser-based requests from registered URLs.
-More on the `popup.html` later on.
+这里有一个特殊的设置就是 `AllowedCorsOrigins` 属性。这使得 IdentityServer 仅接受来自注册的 URL 发送来的基于浏览器请求。更多详情将会在后面的 `popup.html` 有所了解。
 
-**Remark** Right now the client has access to all scopes (via the `AllowAccessToAllScopes` setting). For production applications you would narrow that down to only the scopes it's expected to access with the `AllowedScopes` property.
+**备注** 现在客户端可以访问所有的域（通过设置 `AllowAccessToAllScopes`）。对于产品应用，你应该通过 `AllowedScopes` 属性来缩小它所期望的域。
 
-## Configuring IdentityServer - Users
-Next we will add some users to IdentityServer - again this can be accomplished by providing a simple C# class. You can retrieve user information from any data store and we provide out of the box support for ASP.NET Identity and MembershipReboot.
+## 配置 IdentityServer ——用户 (Configuring IdentityServer - Users)
+
+接下来，我们将要在 IdentityServer 中添加一些用户——同样，这次也是通过提供一个简单的 C# 类来完成。你可以从任何用户仓储中检索用户信息并且我们为 ASP.NET Identity 和 MembershipReboot 提供了开箱即用的支持。
 
 ```csharp
 public static class Users
@@ -112,8 +119,9 @@ public static class Users
 }
 ```
 
-## Configuring IdentityServer - Scopes
-Finally we will add scopes to IdentityServer. For authentication we'll only put standard OIDC scopes. When we'll integrate API calls we'll create our own.
+## 配置 IdentityServer ——域 (Configuring IdentityServer - Scopes)
+
+最后，我们需要在 IdentityServer 中添加一些域。为了认证的目的，我们仅需要放置一些标准的 OIDC 域。当我们集成 API 调用的时候，会创建供我们自己使用的域。
 
 ```csharp
 public static class Scopes
@@ -129,15 +137,13 @@ public static class Scopes
 }
 ```
 
-## Adding Startup
-IdentityServer is configured in the startup class. Here we provide information about the clients, users, scopes,
-the signing certificate and some other configuration options.
-In production you should load the signing certificate from the Windows certificate store or some other secured source.
-In this sample we simply added it to the project as a file (you can download a test certificate from [here](https://github.com/identityserver/Thinktecture.IdentityServer3.Samples/tree/master/source/Certificates).
-Add it to the project and set its `Copy to Output Directory` property to `Copy always`.
+## 添加 Startup (Adding Startup)
 
+IdentityServer 是在 Startup 类中进行配置的。在这里，我么会提供客户端，用户，域，签名证书以及一些其它配置选项的信息。
 
-For info on how to load the certificate from Azure WebSites see [here](http://azure.microsoft.com/blog/2014/10/27/using-certificates-in-azure-websites-applications/).
+在生产环境中，你应该从 Windows certificate store 或者其它安全的源那里加载签名证书。而在这个样例中，我们只需要简单地将其作为文件添加到项目中（你可以从 [这里](https://github.com/identityserver/Thinktecture.IdentityServer3.Samples/tree/master/source/Certificates) 下载一个测试证书）。将它添加到项目中，并设置它的 `Copy to Output Directory` 属性为 `Copy always` 。
+
+想要获取怎么从 Azure Website 加载证书的信息，参见 [这里](http://azure.microsoft.com/blog/2014/10/27/using-certificates-in-azure-websites-applications/) 。
 
 ```csharp
 public class Startup
@@ -164,13 +170,13 @@ public class Startup
 }
 ```
 
-At this point you have a fully functional IdentityServer and you can browse to the discovery endpoint to inspect the configuration:
-
+到目前为止，你有了一个完整功能的 IdentityServer 并且你可以浏览 Discovery 端点来查看相关配置：
 
 ![disco](https://cloud.githubusercontent.com/assets/6102639/12252651/431f61f0-b92d-11e5-9ca8-a49c3db5ea52.png)
 
 ## RAMMFAR
-One last thing, please don't forget to add RAMMFAR to your web.config, otherwise some of our embedded assets will not be loaded correctly by IIS:
+
+最后一件事，不要忘记在 web.config 中添加 RAMMFAR ，不然的话，我们的一些嵌入式资产将不会在 IIS 中被正确地加载：
 
 ```xml
 <system.webServer>
@@ -178,16 +184,15 @@ One last thing, please don't forget to add RAMMFAR to your web.config, otherwise
 </system.webServer>
 ```
 
-## JS Client - setup
+## JS 客户端——设置 (JS Client - setup)
 
-We use several third-party libraries to support our application:
+我们会使用几个第三方类库来支持我们的应用程序：
 
  - [jQuery](http://jquery.com)
  - [Bootstrap](http://getbootstrap.com)
  - [oidc-client-js](https://github.com/IdentityModel/oidc-client-js)
 
-We are going to install them with [npm](https://www.npmjs.com/), the Node.js front-end package manager. If you don't have npm installed, you can follow [these instructions on the npm website](https://docs.npmjs.com/getting-started/installing-node).
-Once npm is installed, open a command-line prompt in the `JsApplication` folder:
+我们将使用 [npm](https://www.npmjs.com/) 来安装这些类库，它是 Node.js 的前端包管理器。如果你还没有安装 npm ，你可以参考这个文档 [these instructions on the npm website](https://docs.npmjs.com/getting-started/installing-node) 。一旦安装完成 npm ， 在 `JsApplication` 目录下打开一个命令行提示符，并键入以下命令：
 
 ```sh
 $ npm install jquery
@@ -195,12 +200,11 @@ $ npm install bootstrap
 $ npm install oidc-client
 ```
 
-By default, npm installs packages in the `node_modules` folder.
+默认情况，npm 会在 `node_modules` 目录下安装这些包。
 
-**Important** npm packages are usually not committed to source control. If you cloned the repository containing the final source code and want to restore the npm packages, open a
-command-line prompt in the `JsApplication` folder and run `npm install` to restore packages.
+**重要** npm 包通常是不加入到源代码控制中的。如果你克隆包含最终源代码的仓储，然后想要恢复包的话，只需要在 `JsApplication` 目录的命令行提示符中输入 `npm install` 即可恢复包。
 
-We also create a basic `index.html` file:
+我们也创建一个基础的 `index.html` 文件：
 
 ```html
 <!DOCTYPE html>
@@ -243,7 +247,7 @@ We also create a basic `index.html` file:
                 <div class="panel panel-default">
                     <div class="panel-heading">ID Token Contents</div>
                     <div class="panel-body">
-                        <pre class="js-id-token"></pre>
+                        <pre class="js-user"></pre>
                     </div>
                 </div>
             </div>
@@ -257,7 +261,7 @@ We also create a basic `index.html` file:
 </html>
 ```
 
-and a `popup.html` file:
+和一个 `popup.html` 文件：
 
 ```html
 <!DOCTYPE html>
@@ -272,14 +276,14 @@ and a `popup.html` file:
 </html>
 ```
 
-We have two HTML files because `oidc-client` can open a popup to show the login form to the user.
+我们有了两个 HTML 文件，因为 `oidc-client` 会打开一个弹窗为用户展示登录表单。
 
-## JS Client - authentication
+## JS 客户端——认证 (JS Client - authentication)
 
-Now that we have everything we need, we can configure our login settings in `index.html` thanks to the `UserManager` JS class.
+现在，有我们所需要的一切东西了，多亏了有 `UserManager` JS 类，我们可以在 `index.html` 页面中配置登录设置。
 
 ```js
-// helper function to show data to the user
+// 向用户展示数据的辅助函数
 function display(selector, data) {
     if (data && typeof data === 'string') {
         data = JSON.parse(data);
@@ -319,47 +323,45 @@ $('.js-login').on('click', function () {
 });
 ```
 
-Let's go quickly through the settings:
+我们现在快速过一遍这个设置：
 
- - `authority` is the base URL of our IdentityServer instance. This will allow `oidc-client` to query the metadata endpoint so it can validate the tokens
- - `client_id` is the id of the client we want to use when hitting the authorization endpoint
- - `popup_redirect_uri` is the redirect URL used when using the `signinPopup` method. If you prefer not having a popup and redirecting the user in the main window, you can use the `redirect_uri` property and the `signinRedirect` method
- - `response_type` defines in our case that we only expect an identity token back
- - `scope` defines the scopes the application asks for
- - `filterProtocolClaims` indicates to oidc-client if it has to filter some OIDC protocol claims from the response: `nonce`, `at_hash`, `iat`, `nbf`, `exp`, `aud`, `iss` and `idp`
+ - `authority` 是 IdentityServer 的基 URL 。这将会允许 `oidc-client` 查询元素据端点，然后可以验证令牌
+ - `client_id` 是客户端的 id ，在授权端点会用得到
+ - `popup_redirect_uri` 是重定向 URL ，当使用 `signinPopup` 方法的时候会使用得到。如果你不倾向于使用一个弹窗而想要在主窗口来执行重定向，你可以使用 `redirect_uri` 属性和 `signinRedirect` 方法
+ - `response_type` 定义令牌类型，在我们的例子中，我们期望的是返回身份令牌
+ - `scope` 定义应用想要的域
+ - `filterProtocolClaims` 指示 oidc-client 是否需要过滤一些响应中的 OIDC 协议声明：`nonce`, `at_hash`, `iat`, `nbf`, `exp`, `aud`, `iss` 和 `idp`
 
-We also handle clicks on the Login button to open the login page popup. The `signinPopup` returns a `Promise` which is resolved when the user data has been retrieved and validated.
+我们也需要处理 Login 按钮的点击，用于打开一个登录页面弹窗。`signinPopup` 会返回一个 `Promise` ，当完成用户数据的获取以及验证的时候会被解析。
 
-This data is accessible via 2 ways:
+可以通过以下两个方法来获取数据：
 
- - as the resolved value of the underlying Promise
- - as the data associated with the `userLoaded` event
+ - 作为 Promise 下解析过的数据
+ - 作为与 `userLoaded` 事件相关联的数据
 
-In our case, we added a handler to the `userLoaded` event by passing a callback function to the `events.addUserLoaded` method.
-The data contains several properties like `id_token`, `scope` and `profile` that all contain different pieces of data.
+在我们的例子中，我们在 `userLoaded` 事件中添加了一个处理器，通过向 `events.addUserLoaded` 方法传递一个回调函数。这个数据包含了几个属性，比如 `id_token`, `scope` 和 `profile` ，都包含了不同的数据项。
 
-We also have to configure `popup.html`:
+我们也需要配置 `popup.html`：
 
 ```js
 new Oidc.UserManager().signinPopupCallback();
 ```
 
-Under the hoods, the instance of `UserManager` in the `index.html` page opens a popup and redirects it to the login page. When IdentityServer redirects the user to the popup page, the information is then passed back to the main page and the popup is automatically closed.
+在背后，`index.html` 页面中的 `UserManager` 实例会打开一个弹窗并将其重定向到登录页面。当 IdentityServer 将用户重定向到弹窗页面时，信息将会回传给主页面，然后弹窗会自动关闭。
 
-At this stage, you can login:
+此阶段，你可以登录了：
 
 ![login-popup](https://cloud.githubusercontent.com/assets/6102639/17659258/bae8530e-6314-11e6-8b1a-0570a26476cc.PNG)
 
 ![login-complete](https://cloud.githubusercontent.com/assets/6102639/17659287/e05f86f2-6314-11e6-941d-1fffe9b94678.PNG)
 
-You can try and set the `filterProtocolClaims` property to `false` and see the additional claims being stored in the `profile` property.
+你可以尝试将 `filterProtocolClaims` 属性设置为 `false` ，然后你将会在 `profile` 属性中看到额外存储的声明。
 
-## JS application - scopes
+## JS 应用——域 (JS application - scopes)
 
-Remember we configured our user with an `email` claim? It doesn't show up in the identity token because the scopes the client asked for - `openid` and `profile` - don't contain this claim.
-If you want to get the user's email, you'll have to ask for another scope which is called `email` by editing the `scopes` property of the `UserManager` settings.
+是否记得我们的用户有一个叫做 `email` 的声明？但是它并没有在身份令牌中展示，这是因为客户端要求的域只是 `openid` 和 `profile` ——却没有包含这个声明。如果我们想要获取用户的 email ，就需要编辑 `UserManager` 的 `scopes` 属性配置，添加一个叫做 `email` 的域。
 
-In our case, the only modification we need to make is to let IdentityServer know that this scope exists in the `Scopes` class:
+在我们的例子中，我们只需要做一些修改，来让 IdentityServer 知道这个域存在于 `Scopes` 类中：
 
 ```csharp
 public static class Scopes
@@ -377,26 +379,27 @@ public static class Scopes
 }
 ```
 
-We don't have to change anything in the client configuration because we specified it has access to all the scopes. In a realistic scenario, you want to give a client access to only the scopes it's expected to request, so this would require a change in the client configuration as well.
+在客户端的配置中我们并不需要做任何的修改，因为我们已经指定了它可以访问到所有的域。在真实情况中，你应该只给客户端它请求所期望的域，所以这同样需要在客户端做一些更改。（译者注：index.html 中的脚本 `scope` 部分需要添加 `email` 声明）
 
-After this, we can see the `email` claim in the user profile:
+在这之后，我们就会在用户 profile 中看到 `email` 声明：
 
 ![login-email](https://cloud.githubusercontent.com/assets/6102639/17659371/6a822c18-6315-11e6-9311-8bbf80e4bdc0.PNG)
 
-# Part 2 - API call
-In the second part, we'll see how you can call a protected API from the JS application.
-We will need to get, along with the identity token, an access token from IdentityServer when we login and use it when calling the API.
+# 第二部分—— API 调用 (Part 2 - API call)
 
-## Create the API project
-Create a new empty web application in Visual Studio.
+在第二部分，我们将会了解一下怎么从 JS 应用发起对受保护资源的访问。我们现在还需要一个访问令牌，这在我们登录的时候，访问令牌和身份令牌将一并从 IdentityServer 那里获取。
+
+## 创建 API 项目 (Create the API project)
+
+在 Visual Studio 中创建一个空的 Web 应用。
 
 ![create api](https://cloud.githubusercontent.com/assets/6102639/12252754/251cd1f0-b92e-11e5-8f8f-469cfc2a0103.png)
 
-This time the URL that has to be assigned to the project is `http://localhost:60136`.
+这里项目的 URL 被设置成 `http://localhost:60136` 。
 
-## Configuring the API
-For this example, we'll create a very simple API based on ASP.NET Web API.
-To do so, install the following packages:
+## 配置 API (Configuring the API)
+
+出于演示，这我们将会基于 ASP.NET Web API 创建一个非常简单的 API 并安装以下的包：
 
 ```
 Install-Package Microsoft.Owin.Host.SystemWeb -ProjectName Api
@@ -405,40 +408,39 @@ Install-Package Microsoft.AspNet.WebApi.Owin -ProjectName Api
 Install-Package IdentityServer3.AccessTokenValidation -ProjectName Api
 ```
 
-**Important** The `IdentityServer3.AccessTokenValidation` package has an indirect dependency on `System.IdentityModel.Tokens.Jwt`.
-At the time of writing, globally updating `Api` project NuGet packages brings down version `5.0.0` of `System.IdentityModel.Tokens.Jwt` which causes an error when starting the `Api` project:
+**重要** `IdentityServer3.AccessTokenValidation` 包会间接依赖 `System.IdentityModel.Tokens.Jwt` 包。目前为止，全局更新 `Api` 项目的  NuGet 包会将 `System.IdentityModel.Tokens.Jwt` 包升级为 `5.0.0` ，这就导致 `Api` 项目启动的时候会报错：
 
 ![api-update-microsoft-identity-tokens](https://cloud.githubusercontent.com/assets/6102639/17659609/119a6be0-6317-11e6-9ca1-24889b813463.PNG)
 
-The solution is to bring back an older compatible version of `System.IdentityModel.Tokens.Jwt`
+解决方案就是将 `System.IdentityModel.Tokens.Jwt` 恢复为旧的兼容版本：
 
 ```
 Install-Package System.IdentityModel.Tokens.Jwt -ProjectName Api -Version 4.0.2.206221351
 ```
 
-Let's now create a `Startup` class and build our OWIN/Katana pipeline.
+现在我们创建一个 `Startup` 类并构建我们的 OWIN/Katana 管道。
 
 ```csharp
 public class Startup
 {
     public void Configuration(IAppBuilder app)
     {
-        // Allow all origins
+        // 允许所有源
         app.UseCors(CorsOptions.AllowAll);
 
-        // Wire token validation
+        // 嵌入令牌验证
         app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
         {
             Authority = "https://localhost:44300",
 
-            // For access to the introspection endpoint
+            // 用于访问自省端点
             ClientId = "api",
             ClientSecret = "api-secret",
 
             RequiredScopes = new[] { "api" }
         });
 
-        // Wire Web API
+        // 嵌入 Web API
         var httpConfiguration = new HttpConfiguration();
         httpConfiguration.MapHttpAttributeRoutes();
         httpConfiguration.Filters.Add(new AuthorizeAttribute());
@@ -448,16 +450,15 @@ public class Startup
 }
 ```
 
-This is all straight-forward, but let's have a closer look at what we use in our pipeline:
+这部分代码非常直观，但是还是让我们进一步看一下在管道中使用了什么：
 
-Since it is the JS application which will make the calls to the API, CORS must be enabled. In our case, we allow all origins to access it. Once again, in a real scenario, we would lock this down to allow only the expected origins.
+由于 JS 应用会向 API 发起调用，所以必须启用 CORS 。在我们的例子中，我们允许所有的源都可以访问它。同样，在真实的场合中，我们应该将源锁定为我们所期望的源。
 
-We then use token validation provided by the `IdentityServer3.AccessTokenValidation` package. By setting the `Authority` property, the metadata document will be retrieved and used to configure the token validation settings.
-Since version 2.2, IdentityServer implements the [introspection endpoint](../endpoints/introspection.html) to validate tokens. This endpoint requires scope authentication which makes it more secured than the traditional access token validation endpoint.
+我们然后会使用 `IdentityServer3.AccessTokenValidation` 包提供的令牌验证功能。通过设置 `Authority` 属性，那么元数据文档将会被检索到并且用于配置令牌验证设置。自 v2.2 之后，IdentityServer 实现了 [自省端点](../endpoints/introspection.html) 并用于验证令牌。这个端点需要使用到域认证，这就使得它相比于传统的访问令牌验证端点更加安全。
 
-Finally, we add our Web API configuration. Note we use a global `AuthorizeAttribute` which makes every endpoint of the API only accessible to authenticated requests.
+最后，我们添加一个 Web API 配置。注意，我们使用了一个全局 `AuthorizeAttribute` 属性，它会使得每一个 API 端点仅对认证的请求可访问。
 
-Let's now add a basic endpoint to our API:
+我们现在在 API 中添加一个基础的端点：
 
 ```csharp
 [Route("values")]
@@ -478,8 +479,9 @@ public class ValuesController : ApiController
 }
 ```
 
-## Updating identityServer configuration
-We introduced a new `api` scope which we have to register in IdentityServer. This is done by editing the `Scopes` class of the `identityServer` project:
+## 更新 IdentityServer 配置 (Updating identityServer configuration)
+
+我们已经引入了一个新的 `api` 域，现在需要将它在 IdentityServer 中进行注册。这可以通过编辑 `IdentityServer` 项目中的 `Scopes` 类来实现：
 
 ```csharp
 public static class Scopes
@@ -492,7 +494,7 @@ public static class Scopes
             StandardScopes.Profile,
             StandardScopes.Email,
 
-            // New scope registration
+            // 注册新的域
             new Scope
             {
                 Name = "api",
@@ -512,10 +514,11 @@ public static class Scopes
 }
 ```
 
-The new scope is a resource scope which means it will end up in the access token. Once again, we don't need to allow the client to request this new scope in this example because of the special setting, but it will be a necessary step in a real scenario.
+这个新增的域就是一个资源域，这意味着它将会出现在访问令牌中。同样，我们不需要做什么设置来允许客户端来请求这个新域，是因为有前面所提到的那个特殊的设置，但是在真实的情况下，它却是一个必不可少的步骤。
 
-## Updating the JS application
-We can now update the JS application settings so it will request the new `api` scope when logging in the user.
+## 更新 JS 应用 (Updating the JS application)
+
+我们现在需要更新 JS 应用的设置来让它在登录用户的时候可以请求这个新增的 `api` 域。
 
 ```js
 var settings = {
@@ -523,31 +526,32 @@ var settings = {
     client_id: 'js',
     popup_redirect_uri: 'http://localhost:56668/popup.html',
 
-    // We add `token` to specify we expect an access token too
+    // 添加 `token` 来指定我们也期望得到一个访问令牌
     response_type: 'id_token token',
-    // We add the new `api` scope to the list of requested scopes
+    // 将新的 `api` 域添加到请求域的列表
     scope: 'openid profile email api',
 
     filterProtocolClaims: true
 };
 ```
 
-The modifications include:
+修改如下：
 
- - a new panel to show the access token
- - an updated `response_type` to specify we want an access token back along with the identity token
- - the new `api` scope to be requested as part of the login request
+ - 新增一个用于展示访问令牌的面板
+ - 更新 `response_type` 来指定我们同时需要使用到身份令牌和访问令牌
+ - 登录请求的时候将新增的 `api` 域作为请求的一部分
 
-The access token is exposed via the `access_token` property and its expiration via the `expires_at` property.
-It is worth noting that `oidc-client` takes away a lot of pain by taking care of validating the tokens with the signing certificate, we don't have to write code.
+访问令牌是通过 `access_token` 属性暴露的而过期时间是通过 `expires_at` 属性获取。
 
-After logging in, here's what we get:
+值得注意的是 `oidc-client` 帮我们完成了许多痛苦的事情，比如使用签名证书来验证令牌，等等，这些我们都不需要写一行代码。
+
+登录之后，这就是我们得到的：
 
 ![access-token](https://cloud.githubusercontent.com/assets/6102639/17659923/1ebf7a16-6319-11e6-99f7-33bef104d0e7.PNG)
 
-## Calling the API
+## 调用 API (Calling the API)
 
-Now that we have an access token, we can include the call to the API:
+现在，我们有了一个访问令牌，现在我们可以在 API 中包含这个调用：
 
 ```html
 [...]
@@ -557,14 +561,14 @@ Now that we have an access token, we can include the call to the API:
             <ul class="list-inline list-unstyled requests">
                 <li><a href="index.html" class="btn btn-primary">Home</a></li>
                 <li><button type="button" class="btn btn-default js-login">Login</button></li>
-                <!-- New button to trigger an API call -->
+                <!-- 新增一个按钮用于触发 API 调用 -->
                 <li><button type="button" class="btn btn-default js-call-api">Call API</button></li>
             </ul>
         </div>
     </div>
 
     <div class="row">
-        <!-- Make the existing sections 6-column wide -->
+        <!-- 将现有的区域改为 6 栏宽 -->
         <div class="col-xs-6">
             <div class="panel panel-default">
                 <div class="panel-heading">User data</div>
@@ -574,7 +578,7 @@ Now that we have an access token, we can include the call to the API:
             </div>
         </div>
 
-        <!-- And add a new one for the result of the API call -->
+        <!-- 新增一个区域用于展示 API 调用的结果 -->
         <div class="col-xs-6">
             <div class="panel panel-default">
                 <div class="panel-heading">API call result</div>
@@ -612,30 +616,30 @@ $('.js-call-api').on('click', function () {
 });
 ```
 
-We now have a button which will trigger the API call along with another panel to show the call response.
-Please note that the access token is passed in the `Authorization` header of the request.
+现在我们有了一个可以触发 API 调用的按钮以及一个展示调用响应的面板。注意，访问令牌是在请求 `Authorization` 报头添加的。
 
-Here's what we see if we call the API prior to login:
+这里就是我们如果在登录之前调用 API 的结果：
 
 ![api-without-access-token](https://cloud.githubusercontent.com/assets/6102639/17660059/2ce58a44-631a-11e6-8f68-c7a4edf85074.PNG)
 
-And after login:
+登录之后再调用的结果：
 
 ![api-with-access-token](https://cloud.githubusercontent.com/assets/6102639/17660060/2e898dfa-631a-11e6-9721-a0b98bd3fdcf.PNG)
 
-In the first case, there was no access token, hence no `Authorization` header in the request, so the access token validation middleware did nothing. The request flowed through the API as unauthenticated, the global `AuthorizeAttribute` rejected it and responded with a `401 Unauthorized` error.
-In the second case, the token validation middleware found the token in the `Authorization` header, passed it along to the introspection endpoint which flagged it as valid, and an identity was created with the claims it contained. The request, this time authenticated, flowed to Web API, the `AuthorizeAttribute` contrainsts were satisfied, and the endpoint was invoked.
+第一个案例中，还没有访问令牌，所以在请求中没有 `Authorization` 报头，所以访问令牌验证中间件没有做任何事情。因此流向 API 的请求被认为是未认证的，全局 `AuthorizeAttribute` 拒绝了这个请求并使用 `401 Unauthorized` 错误进行响应。
 
-# Part 3 - Renewing tokens, logging out and checking sessions
+第二个案例中，令牌验证中间件在 `Authorization` 报文头中发现了令牌，然后将其传递给自省端点，自省端点将其标记为合法的令牌，随之创建了一个身份以及它所包含的声明。本次流向 Web API 的请求经过了认证，`AuthorizeAttribute` 限制非常满意，因此 API 端点得到了调用。
 
-We now have a working JS application which logs in against IdentityServer and makes successful calls to a protected API.
-But users will soon encounter issues when their access token expires and is rejected by the access token validation middleware on the API.
-To work around that, we can setup `oidc-token-manager` to automatically renew the access token when it's about to expire, without any steps required for the user.
+# 第三部分——更新令牌，登录和会话检测 (Part 3 - Renewing tokens, logging out and checking sessions)
 
-## Expired tokens
+我们现在已经有了一个能正常运行的 JS 应用，它能结合 IdentityServer 进行登录，同样它也能成功向受保护的资源发起调用。但是用户很快就会遇到一个问题，就是访问令牌过期之后，API 中的访问令牌验证中间件就会拒绝后续的请求。
 
-Let's first see how we can have a token expire on purpose. We have to reduce the lifetime of the access token.
-This is a per-client setting, so we'll have to edit our `Clients` class in the IdentityServer project:
+为了解决这个问题，我们可以设置 `oidc-token-manager` 在令牌即将要过期的时候来自动刷新访问令牌，而不需要用户来完成这件事。
+
+
+## 过期的令牌 (Expired tokens)
+
+我们首先看一下如何让一个令牌过期。我们需要削减访问令牌的生命周期。这是每个客户端的设置，所以我们需要在 IdentityServer 项目中编辑 `Clients` 类：
 
 ```csharp
 public static class Clients
@@ -669,50 +673,48 @@ public static class Clients
 }
 ```
 
-The access token lifetime, which is 1 hour by default, has been changed to 10 seconds.
-What you'll experience if you login the JS application again is that you'll get the same `401 Unauthorized` error when you call the API 10 seconds after logging in.
+访问令牌的默认生命周期是 1 小时，现在已经更改为 10 秒钟。现在，当你再次成功登录应用后，10 秒后继续调用 API 就会得到一个 `401 Unauthorized` 错误。
 
-## Renewing tokens
+## 更新令牌 (Renewing tokens)
 
-We are going to rely on a feature `oidc-client-js` gives us to renew the tokens.
-Internally, the JS library keeps track of the expiration time of the access token and can request a new one by issuing a new authorization request to IdentityServer.
-This will be invisible to the user as the [`prompt`](../endpoints/authorization.html) setting, which will be set to `none`, prevents the user from having to log in or give his consent while he has a valid session.
-IdentityServer will return a new access token which will replace the one that is about to expire.
+我们将要依赖 `oidc-client-js` 提供的特性来帮助我们更新令牌。
 
-There are several settings related to access token expiration and renewal:
+在内部，JS 类库会跟踪访问令牌的过期时间，然后通过向 IdentityServer 发起授权请求来获取一个新的令牌。
 
- - The [`accessTokenExpiring`](https://github.com/IdentityModel/oidc-client-js/wiki#events) event will be fired when the access token is about to expire
- - The [`accessTokenExpiringNotificationTime`](https://github.com/IdentityModel/oidc-client-js/wiki#configuration) can be used to tweak how far before the token expires the `accessTokenExpiring` event is fired. The default value is `60` seconds
- - Another setting is named `automaticSilentRenew` which instructs the library to automatically renew the access token when it's about to expire
- - Finally, the `silent_redirect_uri` setting needs to be configured so the library can specify it as a return URL when trying to get a new token
+通过对 [`prompt`](../endpoints/authorization.html) 进行设置，这个过程对用户是不可见的，这会防止在用户有一个合法会话的期间让用户继续登录或者征求他的同意 (consent) 。IdentityServer 会返回一个新的访问令牌用于替换即将过期的令牌。
 
-Here is how `oidc-client-js` handles automatic token renewal.
-When the token is about to expire, a dynamic hidden `iframe` will be created.
-In this `iframe` a new authorization request will be made to IdentityServer. If the request succeeds, identityServer will redirect the `iframe` to the specified silent redirect URL, in which a piece of JS code will update the user information so that the main window gets access to it/
+这里有几个设置与访问令牌过期和更新有关：
 
-Let's make some modifications in our configuration to take advantage of these capabilities.
+ - [`accessTokenExpiring`](https://github.com/IdentityModel/oidc-client-js/wiki#events) 事件会在访问令牌即将过期的时候触发
+ - [`accessTokenExpiringNotificationTime`](https://github.com/IdentityModel/oidc-client-js/wiki#configuration) 可以被用来调整在令牌过期之前，据 `accessTokenExpiring` 事件的时间，默认值是 `60` 秒
+ - `automaticSilentRenew` 用于指示类库在令牌即将过期的时候自动更新访问令牌
+ - `silent_redirect_uri` 需要对其进行配置，这样类库在尝试获取一个新令牌的时候可以指定它的返回 URL 。
+
+这就是 `oidc-client-js` 处理令牌更新自动化的配置。当令牌将要过期的时候，将会创建一个隐藏的动态 `iframe` 。在这个 `iframe` 中，一个新的授权请求将会发送到 IdentityServer 。如果请求成功，IdentityServer 会将 `iframe` 重定向到指定的静默重定向 URL ，在那里，有一段 JS 代码将会更新用户信息，这样在主窗口就会获取到这个更新的用户信息。
+
+现在让我们在配置中做一些修改。
 
 ```js
 var settings = {
     authority: 'https://localhost:44300',
     client_id: 'js',
     popup_redirect_uri: 'http://localhost:56668/popup.html',
-    // Add the slient renew redirect URL
-    silent_redirect_uri: 'http://localhost:56668/silent-renew.html'
+    // 添加静默更新重定向 URL
+    silent_redirect_uri: 'http://localhost:56668/silent-renew.html',
 
     response_type: 'id_token token',
     scope: 'openid profile email api',
 
-    // Add expiration nofitication time
+    // 添加过期通知时间
     accessTokenExpiringNotificationTime: 4,
-    // Setup to renew token access automatically
+    // 设置自动更新访问令牌
     automaticSilentRenew: true,
 
     filterProtocolClaims: true
 };
 ```
 
-Since we specified a new page as the `silent_redirect_uri`, we have to create that page
+由于我们在 `silent_redirect_uri` 指定了一个新的页面，我们现在需要创建这个页面。
 
 ```html
 <!DOCTYPE html>
@@ -730,7 +732,7 @@ Since we specified a new page as the `silent_redirect_uri`, we have to create th
 </html>
 ```
 
-The second step is to let IdentityServer know that it is OK to redirect the user to that new page after the authentication is successful:
+第二步就是让 IdentityServer 知道用户认证成功之后重定向的 URL 是合法的：
 
 ```csharp
 public static class Clients
@@ -749,7 +751,7 @@ public static class Clients
                 RedirectUris = new List<string>
                 {
                     "http://localhost:56668/popup.html",
-                    // The new page is a valid redirect page after login
+                    // 这个新页面是登录之后合法的重定向页面
                     "http://localhost:56668/silent-renew.html"
                 },
 
@@ -759,17 +761,16 @@ public static class Clients
                 },
 
                 AllowAccessToAllScopes = true,
-                AccessTokenLifetime = 70
+                AccessTokenLifetime = 10
             }
         };
     }
 }
 ```
 
-When the renewal is successful, the `UserManager` will raise a `userLoaded` event.
-Since we already handle this event, the updated data will automatically be captured and displayed on the UI.
+当更新成功之后，`UserManager` 会抛出一个 `userLoaded` 事件。由于我们已经处理了这个事件，那么更新的数据将会被自动捕获并展示到 UI 中。
 
-When it fails, it will raise a `silentRenewError` event, which we can subscribe to so we know when something went wrong
+当失败了，它将会抛出一个 `silentRenewError` 事件，我们可以订阅这个事件来了解究竟什么出了错
 
 ```js
 manager.events.addSilentRenewError(function (error) {
@@ -777,17 +778,15 @@ manager.events.addSilentRenewError(function (error) {
 });
 ```
 
-We updated the access token lifetime to 10 seconds and instructed `oidc-client-js` to renew the token 4 seconds before it expires.
-So now, after logging in, we can see that every 6 seconds we get a fresh access token from IdentityServer.
+我们已经将访问令牌的生命周期更新为 10 秒钟并且指示 `oidc-client-js` 在访问令牌过期前 4 秒前更新它。那么现在，在我们登录之后，就会看到每隔 6 秒钟就会到 IdentityServer 那里刷新一下访问令牌。
 
-## Logging out
+## 登出 (Logging out)
 
-Logging out of a JS application has a different meaning than from a server-side application, because if you refresh the main page, you will lose the tokens and will have to login again.
-But when the login popup opens, it could be that you still have a valid session cookie for the IdentityServer web application. It could then be possible that the popup doesn't prompt you for your credentials and close itself. This is similar to when the token manager silently renews the token.
+相比于服务器端应用，从一个 JS  应用中登出有不同的意义，因为如果你刷新主页，你将会丢失掉令牌并且需要重新登录。但是当登录弹窗打开，你却仍然有一个合法的会话 cookie 。那么这个弹窗就不会就不会向你寻要凭据并且自动关闭掉。这和令牌管理器自动刷新令牌很相似。
 
-Logging out here means logging out of IdentityServer so that, next time you try to login from an IdentityServer-protected application, you will have to enter your credentials again.
+这里的登出意味着从 IdentityServer 那里登出，那么下一次你想要登录 IdentityServer 保护的应用，你需要再次输入你的凭据。
 
-The process here is simple, we just need a logout button that calls the `signoutRedirect` method of the `UserManager` instance. We also need to let IdentityServer know that the specified post-logout redirect URL is valid:
+处理这个过程是非常简单的，我们只需要添加一个登出按钮来调用 `UserManager` 实例的 `signoutRedirect` 方法。我们同样需要让 IdentityServer 知道指定的 post-logout 重定向地址是合法的就行：
 
 ```csharp
 public static class Clients
@@ -809,7 +808,7 @@ public static class Clients
                     "http://localhost:56668/silent-renew.html"
                 },
 
-                // Valid URLs after logging out
+                // 登出之后合法的重定向 URLs
                 PostLogoutRedirectUris = new List<string>
                 {
                     "http://localhost:56668/index.html"
@@ -835,7 +834,7 @@ public static class Clients
             <li><a href="index.html" class="btn btn-primary">Home</a></li>
             <li><button type="button" class="btn btn-default js-login">Login</button></li>
             <li><button type="button" class="btn btn-default js-call-api">Call API</button></li>
-            <!-- New logout button -->
+            <!-- 新增的注销按钮 -->
             <li><button type="button" class="btn btn-danger js-logout">Logout</button></li>
         </ul>
     </div>
@@ -848,7 +847,7 @@ var settings = {
     client_id: 'js',
     popup_redirect_uri: 'http://localhost:56668/popup.html',
     silent_redirect_uri: 'http://localhost:56668/silent-renew.html',
-    // Add the post logout redirect URL
+    // 添加 post logout 重定向 URL
     post_logout_redirect_uri: 'http://localhost:56668/index.html',
 
     response_type: 'id_token token',
@@ -869,51 +868,40 @@ $('.js-logout').on('click', function () {
 });
 ```
 
-When clicking the `Logout` button, the user will be redirected to IdentityServer so that the session cookie is cleared.
+当点击 `Logout` 按钮，用户将会被重定向到 IdentityServer 来清除会话 cookie 。
 
 ![logout](https://cloud.githubusercontent.com/assets/6102639/12256384/d9de8df0-b950-11e5-91b2-650a0a749a7f.png)
 
-_Please note the screenshot above shows a page served by IdentityServer, not the JS application_
+_请注意上面页面的截图是由 IdentityServer 提供的，而不是 JS 应用_
 
-While this example shows how to logout the user via the main window, it's worth noting that `oidc-client-js` also provides a way to make this happen in a popup, much like the login was implemented.
-You'll find more information in the [documentation of `oidc-client-js`](https://github.com/IdentityModel/oidc-client-js/wiki#methods).
+虽然在这个例子中我们是通过主窗口来演示用户登出的过程，但是 `oidc-client-js` 同样提供了在弹窗中登出的方法，和登录的实现方式很像。访问 [`oidc-client-js` 文档](https://github.com/IdentityModel/oidc-client-js/wiki#methods) 获取更多信息。
 
-## Check session
+## 会话检测 (Check session)
 
-The session in our JS application starts when the identity token we get back from IdentityServer is validated.
-IdentityServer itself supports session management so it returns, in the authorization response, a value named `session_state`.
-You can find the OpenID Connect spec related to that matter [here](http://openid.net/specs/openid-connect-session-1_0.html).
+我们的 JS 应用中的会话开始于当我们从 IdentityServer 那里获取到身份令牌。IdentityServer 本身支持会话管理，所以在授权响应中一并返回了，就是 `session_state` 属性的值。你可以从 OpenID Connect [spec](http://openid.net/specs/openid-connect-session-1_0.html) 中找到与此相关的规范。
 
-In some cases, we might be interested to know if the user ended their session on IdentityServer, for example by logging out of another application which in turned logged them out of IdentityServer.
-The way to do this this is to compute the `session_state` value. If it's equal to the one IdentityServer sent, this means the session state is unchanged, so the user is still logged in. It it's different, something changed, possibly the user logged out. In this case it's advised to issue a silent authorization request, with `prompt=none`. If it succeeds, we get a new identity token, and it means the session on the IdentityServer side is still valid. If it fails, the user has logged out, and we have to ask them to log in again.
+某些情况下，你可能想要知道用户是否在 IdentityServer 中结束了会话，举个例子，在一个应用中登出会让他们在 IdentityServer 中登出。通过计算 `session_state` 的值可以得出结果。如果它等于 IdentityServer 发送的会话状态，那么意味着当前的会话状态没有改变，所以用户仍然处于登录状态。如果不同，那么肯定发生了变化，很可能用户就已经登出了。在这种情况下，建议发出一个静默授权请求，使用 `prompt=none` 设置。如果成功，我们就会得到一个新的身份令牌，这就意味着 IdentityServer 那边的会话仍然合法。如果失败，那么用户就已经登出了，我们就需要让用户重新登录。
 
-Unfortunately, the JS application on its own cannot compute the `session_state` value because it depends on the IdentityServer session cookie value which it doesn't have access to.
-The design of the [specification](https://openid.net/specs/openid-connect-session-1_0.html) requires to load, in a hidden `iframe`, the checksession endpoint from IdentityServer. The JS application and this `iframe` can then communicate with the [`postMessage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) API.
+不幸的是，JS 应用本身还不能计算 `session_state` 的值，因为它依赖于 IdentityServer 的会话值，而这个值他没法获取到。
+[spec](https://openid.net/specs/openid-connect-session-1_0.html) 的设计是需要在一个隐藏的 `iframe` 中从 IdentityServer 加载会话检测端点。然后 JS 应用可以与这个 `iframe` 使用 [`postMessage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) API 进行通信.
 
-### The checksession endpoint
+### 会话检测端点 (The checksession endpoint)
 
-This endpoint serves a simple page which listens to messages sent with `postMessage`. The data passed in the message is used to compute the session state hash. If it matches the one sent by IdentityServer, the page sends a message back to the calling window with the value `unchanged`. It it doesn't, it sends back `changed`. If something goes wrong, it sends `error`.
+这个端点服务一个简答的页面，用于监听 `postMessage` 发送的消息。这个消息中传递的数据用于计算会话状态哈希。如果它匹配 IdentityServer 发送的会话状态中的一个，那么这个页面将会发送一个 `unchanged` 消息给调用它的窗口。没有没有匹配的，将会发送 `changed` 。如果出错，就会发送 `error` 。
 
-### Building the session check feature
+### 构建会话检测特性 (Building the session check feature)
 
-Fortunately, `oidc-client-js` takes care of everything.
-As a matter of fact, the default settings monitor the session state already.
-The name of the associated property is [`monitorSession`](https://github.com/IdentityModel/oidc-client-js/wiki#usermanager).
+幸运的是，`oidc-client-js` 会帮你负责一切的事情。事实上，默认的设置已经对会话状态进行了检测。相关的属性名称为 [`monitorSession`](https://github.com/IdentityModel/oidc-client-js/wiki#usermanager) 。
 
-This means that right after the user is logged in, `oidc-client-js` creates a hidden `iframe` in which the sessioncheck endpoint from IdentityServer is loaded.
-At regular intervals, a message is sent to that `iframe` with both the client id and the session state.
-Messages sent to the `iframe` are also handled and the received value determines if a session change has happened.
+这就意味着用户一旦登录之后，`oidc-client-js` 就会创建一个隐藏的 `iframe` ，并在当中加载 IdentityServer 的会话检测端点。每隔一段时间，就有一个消息发送到 `iframe` 里，同时包含了客户端 id 和会话状态。发送到 `iframe` 消息会被处理并且接收到的值会用于确认会话是否发生更改。
 
-To acknowledge this works as expected, we'll take advantage of the logging system provided by `oidc-client-js`.
-By default, a no-op logger is used, but we can have the library log messages to the browser console.
+想要确认它是如我们期望的那样工作，我们会利用到 `oidc-client-js` 提供的日志系统。默认情况下使用的是 no-op logger ，但是我们可以让类库将日志输出到浏览器控制台中。
 
 ```js
 Oidc.Log.logger = console;
 ```
 
-To minimise the amount of logged messages, we'll also increase the access token lifetime.
-Lots of messages are logged when renewing tokens, and with the current settings this happens every 6 seconds.
-Let's increase the lifetime to 1 minute.
+想要缩小日志消息数量，我们会延长访问令牌的生命周期。刷新令牌的时候会有很多日志消息，使用现在的设置，这个会每 6 秒钟发生一次。让我们将生命周期延长到 1 分钟。
 
 ```csharp
 public static class Clients
@@ -946,15 +934,14 @@ public static IEnumerable<Client> Get()
             },
 
             AllowAccessToAllScopes = true,
-            // Access token lifetime increased to 1 minute
+            // 将访问令牌生命周期延长到 1 分钟
             AccessTokenLifetime = 60
         }
     };
 }
 ```
 
-Lastly, when a session change is detected and an automatic signin doesn't succeed, the `UserManager` raises a `userSignedOut` event.
-Let's add a handler to this event.
+最后，如果发现会话发生了改变并且自动登录也失败了，`UserManager` 就会抛出一个 `userSignedOut` 事件。让我们为这个事件添加一个处理器。
 
 ```js
 manager.events.addUserSignedOut(function () {
@@ -962,13 +949,10 @@ manager.events.addUserSignedOut(function () {
 });
 ```
 
-After navigating back to the application, logging out, opening the console, and logging back in, we can see in the console that every 2 seconds - the default interval - `oidc-client-js` checks for us
-that the session at IdentityServer is still valid
+现在导航回应用，登出，打开控制台，再登录进去，我们会在控制台中看到每隔 2 秒钟（默认的间隔）—— `oidc-client-js` 会帮我们从 IdentityServer 那边检测会话的合法性。
 
 ![session-check](https://cloud.githubusercontent.com/assets/6102639/17755020/e5fcc630-651a-11e6-8b4b-72b35d3d4f67.png)
 
-To prove that it works, let's open a second tab, navigate to the JS application and login.
-Now both tabs check the state of the session with IdentityServer.
-Logout from one of the tab and observe the `userSignedOut` being handled and the popup appear.
+为了证实它是正常工作的，让我们打开第二个浏览器选项卡，导航到 JS 应用并登录进去。现在两个选项卡都会帮助我们从 IdentityServer 那里检测会话的合法性。现在我们在当中的一个选项卡中登出，然后就会看到 `userSignedOut` 已经被处理了并出现了一个弹窗。
 
 ![logout-event](https://cloud.githubusercontent.com/assets/6102639/17755105/5f317a64-651b-11e6-8c5b-1a2a7cc2b61c.png)
