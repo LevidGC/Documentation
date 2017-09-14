@@ -2,35 +2,35 @@
 layout: docs-default
 ---
 
-# Creating the simplest OAuth2 Authorization Server, Client and API
+# 创建最简单的 OAuth2 授权服务器，客户端和 API (Creating the simplest OAuth2 Authorization Server, Client and API)
 
-The intention of this walkthrough is to create the simplest possible IdentityServer installation acting as an OAuth2 authorization server.
-This is supposed to get you started with some of the basic features and configuration options (the full source code can be found [here](https://github.com/IdentityServer/IdentityServer3.Samples/tree/master/source/Simplest%20OAuth2%20Walkthrough)).
-There are other more advanced walk-throughs in the docs that you could do afterwards. This tutorial includes:
+此演示的目的是创建一个最简单的 IdentityServer ，并充当为 OAuth2 授权服务器。这是为了让你熟悉一些基本的特性和配置选项（完整的代码参见 [这里](https://github.com/IdentityServer/IdentityServer3.Samples/tree/master/source/Simplest%20OAuth2%20Walkthrough)）。本文档中也有一些高级教程演示。教程如下：
 
-* Creating a self-hosted IdentityServer
+* 创建自托管的 IdentityServer
 
-* Setting up clients for application to service communication both using an application account as well as on behalf of a user
+* 为应用服务创建客户端（既可以使用应用账户也可以代表用户来通讯）
 
-* Registering an API
+* 注册 API
 
-* Requesting access tokens
+* 请求访问令牌
 
-* Calling an API
+* 调用 API
 
-* Validating an access token
+* 验证访问令牌
 
-## Setting up IdentityServer
-First we will create a console host and set up IdentityServer.
+## 创建 IdentityServer (Setting up IdentityServer)
 
-Start by creating a standard console application and add IdentityServer via nuget:
+首先我们将要创建一个控制台宿主并建立一个 IdentityServer 。
+
+先创建一个标准的控制台应用程序，然后通过 nuget 来添加 IdentityServer ：
 
 ```
 install-package identityserver3
 ```
 
-### Registering the API
-APIs are modeled as scopes - you need to register all APIs that you want to be able to request access tokens for. For that we create a class that returns a list of `Scope`:
+### 注册 API (Registering the API)
+
+API 都建模为域 (scope) ——你需要注册所有的 API ，这样你就可以使用访问令牌来发送请求。因此，我们创建一个类来返回一个 `Scope` 列表：
 
 ```csharp
 using IdentityServer3.Core.Models;
@@ -50,22 +50,22 @@ static class Scopes
 }
 ```
 
-### Registering the Client
-For now we want to register a single client. This client will be able to request a token for the `api1` scope.
-For our first iteration, there will be no human involved and the client will simply request the token
-on behalf of itself (think machine to machine communication). Later we will add a user to the picture.
+### 注册客户端 (Registering the Client)
 
-For this client we configure the following things:
+现在我们想要注册一个单独的客户端。这个客户端能够请求 `api1` 域的令牌。在我们的第一次迭代中，是没有任何人参与的，客户端是代表它们自己来简单请求令牌的（想象一下机器与机器之间的通信）。后期我们会在当中加入用户。
 
-* Display name and id (unique name)
 
-* The client secret (used to authenticate the client against the token endpoint)
+在这个客户端中，我们配置如下的信息：
 
-* The flow (client credentials flow in this case)
+* 展示名称和 id （名称唯一）
 
-* Usage of so called reference tokens. Reference tokens do not need a signing certificate.
+* 客户端 secret （结合令牌端点可用于认证客户端）
 
-* Access to the `api1` scope
+* 流 （本例中使用的是客户端凭据流）
+
+* 所谓的参考令牌的使用。参考令牌不需要签名证书
+
+* `api1` 域的访问
 
 ```csharp
 using IdentityServer3.Core.Models;
@@ -76,7 +76,7 @@ static class Clients
     {
         return new List<Client>
         {
-           // no human involved
+           // 没有人涉及
             new Client
             {
                 ClientName = "Silicon-only Client",
@@ -101,9 +101,9 @@ static class Clients
 }
 ```
 
-### Configuring IdentityServer
-IdentityServer is implemented as OWIN middleware. It is configured in the `Startup` class using the `UseIdentityServer` extension method.
-The following snippets sets up a bare bones server with our scopes and clients. We also set up an empty list of users - we will add users later.
+### 配置 IdentityServer (Configuring IdentityServer)
+
+IdentityServer 是作为 OWIN 中间件来实现的。它是在 `Startup` 类中通过 `UseIdentityServer` 扩展方法来配置的。下面的片段使用我们的域和客户端建立了一个服务器骨架。我们同样设置了一个空的用户列表——我们后期会添加用户。
 
 ```csharp
 using Owin;
@@ -133,32 +133,33 @@ namespace IdSrv
 }
 ```
 
-### Adding Logging
-Since we are running in a console, it is very handy to have logging output straight to the console window.
-Serilog is a nice logging library for that:
+### 添加日志 (Adding Logging)
+
+由于我们是在控制台中运行的，那么将日志输出到控制台窗口就非常方便。Serilog 就是一个非常不错的日志类库：
 
 ```
 install-package serilog -Version 1.5.14
 install-package serilog.sinks.literate -Version 1.2.0
 ```
 
-### Hosting IdentityServer
-The very last step is to host IdentityServer. For this we add the Katana self-hosting package to our console application:
+### 托管 IdentityServer (Hosting IdentityServer)
+
+最后的一步就是托管 IdentityServer 。因此我们需要将 Katana 自托管包添加到我们的控制台应用中：
 
 ```
 install-package Microsoft.Owin.SelfHost
 ```
 
-Add the following code `Program.cs`:
+将下面的代码添加到 `Program.cs` ：
 
 ```csharp
-// logging
+// 记录日志
 Log.Logger = new LoggerConfiguration()
     .WriteTo
     .LiterateConsole(outputTemplate: "{Timestamp:HH:mm} [{Level}] ({Name:l}){NewLine} {Message}{NewLine}{Exception}")
     .CreateLogger();
 
-// hosting identityserver
+// 托管 Identityserver
 using (WebApp.Start<Startup>("http://localhost:5000"))
 {
     Console.WriteLine("server running...");
@@ -166,15 +167,17 @@ using (WebApp.Start<Startup>("http://localhost:5000"))
 }
 ```
 
-When you run the console app, you should see some diagnostics output and `server running...`.
+当你运行这个控制台应用，你应该会看到一些诊断输出以及 `server running...` 。
 
-## Adding an API
-In this part we will add a simple web API that is configured to require an access token from the IdentityServer we just set up.
+## 添加 API (Adding an API)
 
-### Creating the Web Host
-Add a new `ASP.NET Web Application` to the solution and choose the `Empty` option (no framework references).
+在这个部分，我们会添加一个简单的 Web API ，并且配置它需要我们刚刚在 IdentityServer 中创建的访问令牌。
 
-Add the necessary nuget packages:
+### 创建 Web Host (Creating the Web Host)
+
+在解决方案中添加一个新的 `ASP.NET Web Application` 并选择 `Empty` 选项（没有框架引用）。
+
+添加必要的 nuget 包：
 
 ```
 install-package Microsoft.Owin.Host.SystemWeb
@@ -182,8 +185,9 @@ install-package Microsoft.AspNet.WebApi.Owin
 install-package IdentityServer3.AccessTokenValidation
 ```
 
-### Adding a Controller
-Add this simple test controller:
+### 添加 Controller (Adding a Controller)
+
+添加这个简单的测试 controller ：
 
 ```csharp
 [Route("test")]
@@ -202,10 +206,11 @@ public class TestController : ApiController
 }
 ```
 
-The `User` property on the controller gives you access to the claims from the access token.
+controller 的 `User` 属性使你可以从访问令牌中获取到相关的声明。
 
-### Adding Startup
-Add the following `Startup` class for both setting up web api and configuring trust with IdentityServer
+### 添加 Startup (Adding Startup)
+
+添加下面的 `Startup` 类，它既用于建立 Web API ，也用于配置可信的 IdentityServer
 
 ```csharp
 using Microsoft.Owin;
@@ -221,7 +226,7 @@ namespace Apis
     {
         public void Configuration(IAppBuilder app)
         {
-            // accept access tokens from identityserver and require a scope of 'api1'
+            // 从 IdentityServer 接收访问令牌并需要一个 `api1` 域
             app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
                 {
                     Authority = "http://localhost:5000",
@@ -230,11 +235,11 @@ namespace Apis
                     RequiredScopes = new[] { "api1" }
                 });
 
-            // configure web api
+            // 配置 Web API
             var config = new HttpConfiguration();
             config.MapHttpAttributeRoutes();
             
-            // require authentication for all controllers
+            // 所有 controller 需要认证
             config.Filters.Add(new AuthorizeAttribute());
 
             app.UseWebApi(config);
@@ -243,18 +248,19 @@ namespace Apis
 }
 ```
 
-Try opening the browser and access the test controller - you should see a 401 because the necessary access token is missing.
+尝试打开浏览器并访问这个测试 controller ——你应该会看到一个 401 ，这是因为请求中没有包含必要的访问令牌。
 
-## Adding a Console Client
-In the next part we will add a simple console client that will request an access token and use that to authenticate with the api.
+## 添加控制台客户端 (Adding a Console Client)
 
-First add a new console project and install a nuget package for an OAuth2 client helper library:
+在接下来的这部分，我们将会添加一个简单的控制台客户端，它将会请求访问令牌并使用它在请求 API 的时候用于认证。
+
+首先，添加一个新的控制台项目并添加一个 nuget 包用于 OAuth2 客户端助手类：
 
 ```
 install-package IdentityModel
 ```
 
-The first code snippet requests the access token using the client credentials:
+第一个代码片段使用客户端凭据来请求访问令牌：
 
 ```csharp
 using IdentityModel.Client;
@@ -270,7 +276,7 @@ static TokenResponse GetClientToken()
 }
 ```
 
-The second code snippet calls the API using the access token:
+第二个代码片段就是使用访问令牌来访问 API ：
 
 ```csharp
 static void CallApi(TokenResponse response)
@@ -282,14 +288,17 @@ static void CallApi(TokenResponse response)
 }
 ```
 
-If you call both snippets, you should see `{"message":"OK computer","client":"silicon"}` in your console.
+如果你执行这两个代码片段，你将会在控制台中看到 `{"message":"OK computer","client":"silicon"}` 。
 
-## Adding a User
-So far, the client requests an access token for itself and no user is involved. Let's introduce a human.
+## 添加用户 (Adding a User)
 
-### Adding a user service
-The user service manages users - for this sample we will use the simple in-memory user service.
-First we need to define some users:
+到目前为止，客户端是代表它自己来请求访问令牌的，中间并没有人参与进来。现在我们引入用户。
+
+### 添加用户服务 (Adding a user service)
+
+用户服务是用于管理用户的——在这个例子中，我们使用的是驻内存用户服务。
+
+首先，我们需要定义一些用户：
 
 ```csharp
 using IdentityServer3.Core.Services.InMemory;
@@ -317,16 +326,15 @@ static class Users
 }
 ```
 
-`Username` and `Password` are used to authenticate the user,
-the `Subject` is the unique identifier for that user that will be embedded into the access token.
+`Username` 和 `Password` 是用于认证用户的，`Subject` 是嵌入到访问令牌中的唯一标识符。
 
-In `Startup` replace the empty user list with a call to the `Get` method.
+在 `Startup` 中，将空的用户列表替换为对 `Get` 方法的调用。
 
-### Adding a Client
-Next we will add a client definition that uses the flow called `resource owner password credential grant`.
-This flow allows a client to send the user's username and password to the token service and get an access token back in return.
+### 添加客户端 (Adding a Client)
 
-In total the `Clients` class looks like this then:
+接下来，我们将要添加一个客户端定义，使用的流为 `资源所有者密码凭据许可` 。这个流允许客户端向令牌服务发送用户的用户名和密码，以此获取访问令牌。
+
+最终，`Clients` 类应该如下：
 
 ```csharp
 using IdentityServer3.Core.Models;
@@ -340,7 +348,7 @@ namespace IdSrv
         {
             return new List<Client>
             {
-                // no human involved
+                // 没有人涉及
                 new Client
                 {
                     ClientName = "Silicon-only Client",
@@ -361,7 +369,7 @@ namespace IdSrv
                     }
                 },
 
-                // human is involved
+                // 有人涉及
                 new Client
                 {
                     ClientName = "Silicon on behalf of Carbon Client",
@@ -387,9 +395,11 @@ namespace IdSrv
 }
 ```
 
-### Updating the API
-When a human is involved, the access token will contain the `sub` claim to uniquely identify the user.
-Let's make this small modification to the API controller:
+### 更新 API (Updating the API)
+
+当有人参与其中，访问令牌就会包含 `sub` 声明，用于唯一标识用户。
+
+现在让我们对 API controller 做一些修改：
 
 ```csharp
 [Route("test")]
@@ -421,8 +431,9 @@ public class TestController : ApiController
 }
 ```
 
-### Updating the Client
-Next add a new method to the client to request an access token on behalf of a user:
+### 更新客户端 (Updating the Client)
+
+接下来在客户端中添加一个新方法，用于代表用户来请求访问令牌：
 
 ```csharp
 static TokenResponse GetUserToken()
@@ -436,17 +447,18 @@ static TokenResponse GetUserToken()
 }
 ```
 
-Now try both methods of requesting a token and inspect the claims and the API response.
+现在尝试使用两种方法来请求同一个令牌，并查看一下 API 响应中的声明。
 
-## What to do next
-This walk-through covered a very simple OAuth2 scenario. Next you could try:
+## 接下来做什么 (What to do next)
 
-* The other flows - e.g. implicit, code or hybrid. They are all enablers for advanced scenarios like federation and external identities
+这个演示只覆盖一个非常简单的 OAuth2 场景。接下来你应该尝试：
 
-* Connect to your user database - either by writing your own user service or by using our out of the box support for ASP.NET Identity and MembershipReboot
+* 其它的流——比如，隐式流，编码或者混合流。它们都是高级场景的推动者，比如联合 (federation) 和外部身份。
 
-* Store client and scope configuration in a data store. We have out of the box support for Entity Framework.
+* 连接到你的用户数据库——既可以编写你自己的用户服务，也可以使用对 ASP.NET Identity 和 MembershipReboot 开箱即用的支持。
 
-* Add authentication and identity tokens using OpenID Connect and identity scopes
+* 在数据仓储中存储客户端和域的配置。我们对 Entity Framework 有开箱即用的支持。
 
-**Many of these techniques are used in the [MVC walkthrough](mvcGettingStarted.html) which you should do next**
+* 使用 OpenID Connect 和身份域添加认证和身份令牌。
+
+**许多技术在 [MVC 演示](mvcGettingStarted.html) 中都有使用，想要了解更多，参见此演示**
