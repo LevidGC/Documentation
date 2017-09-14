@@ -2,18 +2,17 @@
 layout: docs-default
 ---
 
-# Introspection Endpoint
+# 自省端点 (Introspection Endpoint)
 
-*Added in v2.2*
+*v2.2 中添加*
 
-The introspection endpoint is an implementation of [RFC 7662](https://tools.ietf.org/html/rfc7662).
+自省端点是对 [RFC 7662](https://tools.ietf.org/html/rfc7662) 的实现。
 
-It can be used to validate reference tokens (or JWTs if the consumer does not have support for appropriate JWT or cryptographic libraries).
+它可以用于验证参考令牌（如果使用者 (consumer) 不支持适当的 JWT 或密码库，也可以用于验证 JWT）。
 
-The introspection endpoint requires authentication using a scope credential
-(only scopes that are contained in the access token are allowed to introspect the token).
+自省端点需要使用一个域 (scope) 凭据进行认证（访问令牌只有包含域才可以被允许来自省令牌）。
 
-### Example
+### 示例 (Example)
 
 ```
 POST /connect/introspect
@@ -22,28 +21,23 @@ Authorization: Basic xxxyyy
 token=<token>
 ```
 
-A successful response will return a status code of 200 and either an active or inactive token:
+成功的响应会返回 200 状态码以及有效或者无效的令牌：
 
-```
+```json
 {
    "active": true,
    "sub": "123"
 }
 ```
 
-Unknown or expired tokens will be marked as inactive:
+未知的或者过期的令牌被标记为无效：
 
-```
+```json
 {
    "active": false,
 }
 ```
 
+如果域没有被授权，那么非法的请求将会返回 400 或 401 状态码。
 
-An invalid request will return a 400 or a 401 if the scope is not authorized.
-
-**Remark** The introspection endpoint replaces the older access token validation endpoint.
-Since the introspection endpoint requires authentication, it adds privacy features to reference tokens, that were
-not available previously.
-The access token validation endpoint still exists, but it is recommended to disable it on the `EndpointOptions` and
-use the introspection endpoint instead.
+**备注** 自省端点替代了更老的访问令牌验证端点。由于自省端点需要认证，它在参考令牌中添加了私有特性，而这在之前是没有的。访问令牌验证端点仍然存在，但是不推荐使用它，你可以在 `EndpointOptions` 中禁用它，并选用自省端点。
