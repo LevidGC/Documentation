@@ -2,90 +2,84 @@
 layout: docs-default
 ---
 
-# Clients
+# 客户端 (Clients)
 
-The `Client` class models an OpenID Connect or OAuth2 client - e.g. a native application, a web application or a JS-based application ([link](https://github.com/IdentityServer/IdentityServer3/blob/master/source/Core/Models/Client.cs)).
+`Client` 类是对 OpenID Connect 或者 OAuth2 客户端的建模——比如，本地应用，Web 应用或者基于 JS 的应用（[链接](https://github.com/IdentityServer/IdentityServer3/blob/master/source/Core/Models/Client.cs)）。
 
 * `Enabled`
-    * Specifies if client is enabled. Defaults to `true`.
+    * 客户端是否启用。默认为 `true` 。
 * `ClientId`
-    * Unique ID of the client
+    * 客户端唯一的 ID
 * `ClientSecrets`
-    * List of client secrets - only relevant for flows that require a secret
+    * 客户端 secret 列表——只与需要 secret 的流相关
 * `ClientName`
-    * Client display name (used for logging and consent screen)
+    * 客户端显示的名称（用于登录和 consent screen）
 * `ClientUri`
-    * URI to further information about client (used on consent screen)
+    * 用于获取客户端更多信息的 URI （用于 consent screen）
 * `LogoUri`
-    * URI to client logo (used on consent screen)
+    * 客户端 Logo URI （用于 consent screen）
 * `RequireConsent`
-    * Specifies whether a consent screen is required. Defaults to `true`.
+    * 指示是否需要 consent screen 。默认为 `true` 。
 * `AllowRememberConsent`
-    * Specifies whether user can choose to store consent decisions. Defaults to `true`.
+    * 用户是否可以存储 consent 决定。默认为 `true` 。
 * `Flow`
-    * Specifies allowed flow for client (either `AuthorizationCode`, `Implicit`, `Hybrid`, `ResourceOwner`, `ClientCredentials` or `Custom`). Defaults to `Implicit`.
+    * 客户端允许使用的流 (`AuthorizationCode`, `Implicit`, `Hybrid`, `ResourceOwner`, `ClientCredentials`, `Custom`) 。默认为 `Implicit` 。
 * `AllowClientCredentialsOnly `
-    * Gets or sets a value indicating whether this client is allowed to request token using client credentials only. This is useful when you want a client to be able to use both a user-centric flow like implicit and additionally client credentials flow. Defaults to false. Should only be used for confidential clients (e.g. not Implicit).
+    * 获取或者设置用于指示客是否允许客户端仅使用客户端凭据来请求令牌的值。如果你想让一个客户端同时使用以用户为中心的流（比如，隐式流）和额外的客户端凭据流时就会有用。默认为 `fasle` 。只应该用于机密性的客户端（比如，不是采用隐式流的）。
 * `RedirectUris`
-    * Specifies the allowed URIs to return tokens or authorization codes to
+    * 指定允许返回令牌或者授权码的 URI
 * `PostLogoutRedirectUris`
-    * Specifies allowed URIs to redirect to after logout
-* `LogoutUri` (added in v2.2)
-    * Specifies logout URI at client for HTTP based logout
-* `LogoutSessionRequired` (added in v2.2)
-    * Specifies if the user's session id should be sent to the LogoutUri. Defaults to true.
+    * 指定登出之后允许重定向的 URI
+* `LogoutUri` （v2.2 新增）
+    * 为基于 HTTP 登出的客户端指定登出 URI
+* `LogoutSessionRequired` （v2.2 新增）
+    * 指定用户会话 id 是否要发送到 LogoutUri 。默认为 `true` 。
 * `RequireSignOutPrompt` (added in v2.4)
-    * Specifies if the client will always show a confirmation page for sign-out. Defaults to false.
+    * 指定客户端在登出的时候是否总是要展示一个确认页。默认为 `false` 。
 * `AllowedScopes`
-    * By default a client has no access to any scopes - either specify the scopes explicitly here (recommended) - 
-      or set `AllowAccessToAllScopes` to true.
+    * 默认情况，客户端不能获取任何的域——可以显式指定相应的域（推荐），也可以将 `AllowAccessToAllScopes` 设置为 `true` 。
 * `AllowAccessTokensViaBrowser` (added in v2.5)
-    * Specifies whether this client is allowed to request access tokens via the browser.
-      This is useful to harden flows that allow multiple response types 
-      (e.g. by disallowing a hybrid flow client that is supposed to use `code id_token` to add the `token` response type and thus leaking       the token to the browser.
+    * 指定客户端是否允许通过浏览器来请求访问令牌。这对于允许多种响应类型的流来说非常有用（比如，通过禁用混合流客户端通过使用 `code id_token` 来添加 `token` 响应类型，这会导致将令牌泄露给浏览器）。
 * `AllowedCustomGrantTypes`
-    * When `Custom` flow is used, you also need to specify which custom grant types this client can use.
-      Explicitly specify the grant types here (recommended) or set `AllowAccessToAllCustomGrantTypes` to true.
+    * 当使用 `Custom` 流，你需要指定客户端可以使用哪一种自定义的许可类型。这里（推荐）明确指定许可类型或者将 `AllowAccessToAllCustomFrantTypes` 设置为 `true` 。
 * `IdentityTokenLifetime`
-    * Lifetime to identity token in seconds (defaults to 300 seconds / 5 minutes)
+    * 以秒为计量单位的身份令牌的生命周期（默认为 300 秒 / 5 分钟）
 * `AccessTokenLifetime`
-    * Lifetime of access token in seconds (defaults to 3600 seconds / 1 hour)
+    * 以秒为计量单位的访问令牌的生命周期（默认为 3600 秒 / 1 小时）
 * `AuthorizationCodeLifetime`
-    * Lifetime of authorization code in seconds (defaults to 300 seconds / 5 minutes)
+    * 以秒为计量单位的授权码的生命周期（默认为 300 秒 / 5 分钟）
 * `AbsoluteRefreshTokenLifetime`
-    * Maximum lifetime of a refresh token in seconds. Defaults to 2592000 seconds / 30 days
+    * 以秒为计量单位的刷新令牌的最大生命周期。默认为 2592000 秒 / 30 天
 * `SlidingRefreshTokenLifetime`
-    * Sliding lifetime of a refresh token in seconds. Defaults to 1296000 seconds / 15 days
+    * 以秒为计量单位的刷新令牌的滑动生命周期 (sliding lifetime) 。默认为 1296000 秒 / 15 天
 * `RefreshTokenUsage`
-    * `ReUse`: the refresh token handle will stay the same when refreshing tokens
-    * `OneTime`: the refresh token handle will be updated when refreshing tokens
+    * `ReUse`: 当刷新令牌的时候刷新令牌句柄 (refresh token handle) 会保持不变
+    * `OneTime`: 当刷新令牌的时候刷新令牌句柄会被更新
 * `RefreshTokenExpiration`
-    * `Absolute`: the refresh token will expire on a fixed point in time (specified by the AbsoluteRefreshTokenLifetime)
-    * `Sliding`: when refreshing the token, the lifetime of the refresh token will be renewed (by the amount specified in SlidingRefreshTokenLifetime). The lifetime will not exceed `AbsoluteRefreshTokenLifetime`.
+    * `Absolute`: 刷新令牌在固定的时间点失效（通过 `AbsoluteRefreshTokenLifetime` 指定）
+    * `Sliding`: 当刷新令牌时候，刷新令牌的生命周期会被更新（通过 `SlidingRefreshTokenLifetime` 指定数量）。声明周期不会超过 `AbsoluteRefreshTokenLifetime` 。
 * `UpdateAccessTokenClaimsOnRefresh`
-    * Gets or sets a value indicating whether the access token (and its claims) should be updated on a refresh token request.
+    * 获取或者设置指示访问令牌（包括它的值）是否应该在刷新令牌请求的时候进行更新的值。
 * `AccessTokenType`
-    * Specifies whether the access token is a reference token or a self contained JWT token (defaults to `Jwt`).
+    * 指定访问令牌是否为一个引用令牌还是一个自包含的 JWT 令牌（默认为 `Jwt`）。
 * `EnableLocalLogin`
-    * Specifies if this client can use local accounts, or external IdPs only. Defaults to `true`.
+    * 指定客户端是否可以使用本地账户还是仅仅为外部身份提供商。默认为 `true` 。
 * `IdentityProviderRestrictions`
-    * Specifies which external IdPs can be used with this client (if list is empty all IdPs are allowed). Defaults to empty.
+    * 指定这个客户端可以使用的外部身份提供商（如果列表为空，则可以使用所有的身份提供商）。默认为空。
 * `IncludeJwtId`
-    * Specifies whether JWT access tokens should have an embedded unique ID (via the `jti` claim).
+    * 指定 JWT 访问令牌是否应该有一个唯一的 ID （通过 `jti` 声明）。
 * `AllowedCorsOrigins`
-    * If specified, will be used by the default CORS policy service implementations (In-Memory and EF) to build a CORS
-      policy for JavaScript clients.
-
+    * 如果指定，会被默认的 CORS 策略服务实现（驻内存和 EF）使用，用于为 JavaScript 客户端构建一个 CORS 策略。
 * `Claims`
-    * Allows settings claims for the client (will be included in the access token).
+    * 允许为客户端设置声明（会被包含在访问令牌中）。
 * `AlwaysSendClientClaims`
-    * If set, the client claims will be sent for every flow. If not, only for client credentials flow (default is `false`)
+    * 如果设置了，客户端声明会在每一个流中发送。如果没有，仅用于客户端凭据流（默认为 `false`）
 * `PrefixClientClaims`
-    * If set, all client claims will be prefixed with `client_` to make sure they don't accidentally collide with user claims. Default is `true`.
+    * 如果设置，所有的客户端声明将会附上 `client_` 前缀，用于确保不会与用户声明发生冲突。默认为 `true` 。
 
-In addition there are a number of settings controlling the behavior of refresh tokens - see [here](../advanced/refreshTokens.html)
+另外有许多设置用于控制刷新令牌的行为——参见 [这里](../advanced/refreshTokens.html)
 
-## Example: Configure a client for implicit flow
+## 示例：配置隐式流客户端 (Example: Configure a client for implicit flow)
 
 ```csharp
 var client = new Client
@@ -111,7 +105,7 @@ var client = new Client
 }
 ```
 
-## Example: Configure a client for resource owner flow
+## 示例：配置资源所有者流客户端 (Example: Configure a client for resource owner flow)
 
 ```csharp
 var client = new Client
