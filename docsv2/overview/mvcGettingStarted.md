@@ -2,35 +2,39 @@
 layout: docs-default
 ---
 
-This tutorial walks you through the necessary steps to get a minimal IdentityServer up and running. For **simplicity** we will host IdentityServer and the client in the same web application - this is not a very realistic scenario, but lets you get started without making it too complicated.
+本教程将指导您完成必要的步骤来创建一个最基本的 IdentityServer 并使其运行。为了尽量 **简单** 我们将 IdentityServer 和客户端托管在同一个 Web 应用下面——在真实的场景下面并不推荐使用，但是它让你在起步阶段并不会感到太复杂。
 
-The full source code can be found [here](https://github.com/identityserver/Thinktecture.IdentityServer3.Samples/tree/master/source/MVC%20Authentication).
+完整的代码参见 [这里](https://github.com/identityserver/Thinktecture.IdentityServer3.Samples/tree/master/source/MVC%20Authentication).
 
-# Part 1 - MVC Authentication & Authorization
-In the first part we will create a simple MVC application and add authentication via IdentityServer to it. Then we will have a closer look at claims, claims transformation and authorization
+# 第一部分——MVC 认证和授权 (Part 1 - MVC Authentication & Authorization)
 
-## Create the web application
-In Visual Studio 2013, create a standard MVC application and set authentication to "No authentication".
+在第一部分，我们将会创建一个简单的 MVC 应用并通过 IdentityServer 来向其添加认证。然后，你会近距离看一下声明，声明的转换以及授权。
+
+## 创建 Web 应用 (Create the web application)
+
+在 Visual Studio 2013 中，创建一个标准的 MVC 应用，并将认证设置为 "No authentication" 。
 
 ![create mvc app](https://cloud.githubusercontent.com/assets/1454075/4604880/16fa22f0-51bd-11e4-96aa-e82206d21e26.png)
 
-You can switch the project now to SSL using the properties window:
+现在使用属性窗口将项目切换到 SSL ：
 
 ![set ssl](https://cloud.githubusercontent.com/assets/1454075/4604894/9f18b656-51bd-11e4-935c-e3ecdb3d1905.png)
 
-**Important**
-Don't forget to update the start URL in your project properties.
+**重要**
+在你的项目属性中不要忘记更新启动 URL 。
 
-## Adding IdentityServer
-IdentityServer is based on OWIN/Katana and distributed as a Nuget package. To add it to the newly created web host, install the following two packages:
+## 添加 IdentityServer (Adding IdentityServer)
+
+IdentityServer 是基于 OWIN/Katana 的并且通过 Nuget 包进行分发。想要将它添加到刚创建的 Web 宿主中，先安装下面的两个包：
 
 ````
 install-package Microsoft.Owin.Host.Systemweb
 install-package IdentityServer3
 ````
 
-## Configuring IdentityServer - Clients
-IdentityServer needs some information about the clients it is going to support, this can be simply supplied using a `Client` object:
+## 配置 IdentityServer ——客户端 (Configuring IdentityServer - Clients)
+
+IdentityServer 需要一些它将要支持的客户端的信息，这可以简单地使用 `Client` 对象来提供：
 
 ```csharp
 public static class Clients
@@ -58,11 +62,11 @@ public static class Clients
 }
 ```
 
-**Remark** Right now the client has access to all scopes (via the `AllowAccessToAllScopes` setting). For production applications you would lock that down.
-More on that later.
+**备注** 到目前为止，客户端可以访问所有的域（通过 `AllowAccessToAllScopes` 设置）。对于生产环境，你应该对此有所限制。
 
-## Configuring IdentityServer - Users
-Next we will add some users to IdentityServer - again this can be accomplished by providing a simple C# class. You can retrieve user information from any data store and we provide out of the box support for ASP.NET Identity and MembershipReboot.
+## 配置 IdentityServer ——用户 (Configuring IdentityServer - Users)
+
+接下来我们将要在 IdentityServer 中添加一些用户——同样我们也是通过简单的 C# 类来提供。你可以从任何数据仓储中检索用户的信息并且我们对 ASP.NET Identity 和 MembershipReboot 都提供了开箱即用的支持。
 
 ```csharp
 public static class Users
@@ -88,15 +92,12 @@ public static class Users
 }
 ```
 
-## Adding Startup
-IdentityServer is configured in the startup class. Here we provide information about the clients, users, scopes,
-the signing certificate and some other configuration options.
-In production you should load the signing certificate from the Windows certificate store or some other secured source.
-In this sample we simply added it to the project as a file (you can download a test certificate from [here](https://github.com/identityserver/Thinktecture.IdentityServer3.Samples/tree/master/source/Certificates).
-Add it to the project and set its build action to `Copy to output`.
+## 添加 Startup (Adding Startup)
+
+IdentityServer 是在 startup 类中配置的。在这里，我们将会提供客户端，用户，域，签名证书和一些其它配置选项的信息。在生产环境中，你应该从 Windows certicate store 或者其它安全的数据源那里加载签名证书。在这个样例中，我们只是简单地将其作为文件添加到项目中（你可以从 [这里](https://github.com/identityserver/Thinktecture.IdentityServer3.Samples/tree/master/source/Certificates) 下载一个测试证书）。将其添加到项目中并将它的 build action 设置为 `Copy to output` 。
 
 
-For info on how to load the certificate from Azure WebSites see [here](http://azure.microsoft.com/blog/2014/10/27/using-certificates-in-azure-websites-applications/).
+想要获取更多关于怎么从 Azure 站点加载证书的信息，参见 [这里](http://azure.microsoft.com/blog/2014/10/27/using-certificates-in-azure-websites-applications/) 。
 
 ```csharp
 public class Startup
@@ -126,13 +127,13 @@ public class Startup
 }
 ```
 
-At this point you have a fully functional IdentityServer and you can browse to the discovery endpoint to inspect the configuration:
-
+到目前为止，你已经有了一个完整功能的 IdentityServer ，浏览 discovery 端点并查看其配置：
 
 ![disco](https://cloud.githubusercontent.com/assets/1454075/4604932/43a3d7da-51c0-11e4-8a88-b74db2b7e771.png)
 
 ## RAMMFAR
-One last thing, please don't forget to add RAMMFAR to your web.config, otherwise some of our embedded assets will not be loaded correctly by IIS:
+
+最后一件事，不要忘记在你的 web.config 中添加 RAMMFAR ，不然，我们的一些嵌入式资产在 IIS 中将不会被正确加载：
 
 ```xml
 <system.webServer>
@@ -140,15 +141,16 @@ One last thing, please don't forget to add RAMMFAR to your web.config, otherwise
 </system.webServer>
 ```
 
-## Adding and configuring the OpenID Connect authentication middleware
-To add OIDC authentication to the MVC application, we need to add two packages:
+## 添加并配置 OpenID Connect 认证中间件 (Adding and configuring the OpenID Connect authentication middleware)
+
+想要将 OIDC 认证添加到 MVC 应用中，我们需要添加两个包：
 
 ````
 install-package Microsoft.Owin.Security.Cookies
 install-package Microsoft.Owin.Security.OpenIdConnect
 ````
 
-Configure the cookie middleware in StartUp.cs with its default values:
+在 Startup.cs 中使用默认值配置 cookie 中间件：
 
 ```csharp
 app.UseCookieAuthentication(new CookieAuthenticationOptions
@@ -156,7 +158,8 @@ app.UseCookieAuthentication(new CookieAuthenticationOptions
         AuthenticationType = "Cookies"
     });
 ```
-Point the OpenID Connect middleware (also in Startup.cs) to our embedded version of IdentityServer and use the previously configured client configuration:
+
+将 OpenID Connect 中间件（也在 Startup.cs 中）指向我们的嵌入式 IdentityServer ，并使用之前配置的客户端配置：
 
 ```csharp
 app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
@@ -170,8 +173,9 @@ app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
     });
 ```
 
-## Adding a protected resource and showing claims
-To initiate the authentication with IdentityServer you need to create a protected resource, e.g. by adding a global authorization filter. For our sample we will simply protect the `About` action on the `Home` controller. In addition we will hand over the claims to the view so we can see which claims got emitted by IdentityServer:
+## 添加一个受保护资源并显示声明 (Adding a protected resource and showing claims)
+
+想要使用 IdentityServer 来初始化认证，你需要创建一个受保护的资源，比如，添加一个全局的授权过滤器。在我们的样例中，我们会简单地保护 `Home` controller 下的 `About` action 。另外，我们会将声明提交给视图，这样我们将会看到 IdentityServer 所发出的声明内容：
 
 ````csharp
 [Authorize]
@@ -181,7 +185,7 @@ public ActionResult About()
 }
 ````
 
-The corresponding view looks like this:
+对应的视图如下：
 
 ````html
 @model IEnumerable<System.Security.Claims.Claim>
@@ -195,18 +199,20 @@ The corresponding view looks like this:
 </dl>
 ````
 
-## Authentication and claims
-Clicking on the about link will now trigger the authentication. IdentityServer will show the login screen and send a token back to the main application. The OpenID Connect middleware validates the token, extracts the claims and passes them on to the cookie middleware, which will in turn set the authentication cookie. The user is now signed in.
+## 认证和声明 (Authentication and claims)
+
+点击 about 链接将会触发认证。IdentityServer 将会显示登录窗口并将一个令牌发送会主窗口。OpenID Connect 中间件会验证这个令牌，提取声明并将它们发送给 cookie 中间件，而它将会设置认证 cookie 。用户现在就已经登录了。
 
 
 ![login](https://cloud.githubusercontent.com/assets/1454075/4604964/7f5d6eb0-51c2-11e4-8016-feac5ed2f67a.png)
 
 ![claims](https://cloud.githubusercontent.com/assets/1454075/4604966/91126e8a-51c2-11e4-8fd9-d9c7af1d096b.png)
 
-## Adding role claims and scope
-In the next step we want to add some role claims to our user which we will use later on for authorization.
+## 添加角色声明和域 (Adding role claims and scope)
 
-For now we got away with the OIDC standard scopes - let's define a roles scope that includes the role claim and add that to the standard scopes:
+下一步，我们想要给用户添加一些角色声明，在后面的授权中会使用到。
+
+现在，我们已经离开了 OIDC 标准域——让我们定义一个角色域，它包含了角色声明并将其添加到标准域：
 
 ```csharp
 public static class Scopes
@@ -234,7 +240,7 @@ public static class Scopes
 }
 ```
 
-Also change the factory in `Startup` to use the new Scopes:
+同样更改 `Startup` 的工厂来使用新域：
 
 ```csharp
 Factory = new IdentityServerServiceFactory()
@@ -243,7 +249,7 @@ Factory = new IdentityServerServiceFactory()
     .UseInMemoryScopes(Scopes.Get()),
 ```
 
-Next we add a couple of role claims to Bob:
+接下来，我们给 Bob 添加一对角色声明：
 
 ```csharp
 public static class Users
@@ -271,8 +277,9 @@ public static class Users
 }
 ```
 
-## Changing the middleware configuration to ask for roles
-By default the OIDC middleware asks for two scopes: `openid` and `profile` - this is why IdentityServer includes the subject and name claims. Now we add a request to the `roles` scope:
+## 更改中间件配置来寻要 roles (Changing the middleware configuration to ask for roles)
+
+默认情况下，OIDC 中间件寻要的是两个域：`openid` 和 `profile` ——这就是为什么 IdentityServer 包含了主体和名称声明。现在，我们添加一个对 `roles` 域的请求：
 
 ```csharp
 app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
@@ -288,30 +295,30 @@ app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
     });
 ```
 
-After successful authentication, you should now see the role claims in the user's claims collection:
+成功认证之后，现在你应该在用户声明集合中看到角色声明：
 
 ![role claims](https://cloud.githubusercontent.com/assets/1454075/4605904/0397adc2-5203-11e4-9e20-32b1b53c7570.png)
 
-## Claims transformation
-When you inspect the claims on the about page, you will notice two things: some claims have odd long type names and there are more claims than you probably need in your application.
+## 声明转换 (Claims transformation)
 
-The long claim names come from Microsoft's JWT handler trying to map some claim types to .NET's `ClaimTypes` class types.
-You can turn off this behavior with the following line of code (in `Startup`).
+当你在 about 页面中查看声明，你将会注意到两件事：某些声明有比较长的奇怪的类型名称以及一些你在应用中可能不需要的声明。
 
-This also means that you need to adjust the configuration for anti-CSRF protection to the new unique `sub` claim type:
+长的声明名称来自于微软的 JWT 处理器，用于尝试将一些声明类型映射到 .NET 的 `ClaimTypes` 类型。你可以使用下面的代码（在 `Startup` 中）来关闭这个行为。
+
+这样做你同样需要为防跨站请求伪造 (anti-CSRF) 保护将配置调整为新的唯一的 `sub` 声明类型：
 
 ```csharp
 AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimTypes.Subject;
 JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 ```
 
-The claims will now look like this:
+现在声明看起来将会如下：
 
 ![shorter claims](https://cloud.githubusercontent.com/assets/1454075/4606129/2fb799fa-5210-11e4-8b30-22a47e9cbeb1.png)
 
-This is an improvement, but there are still some low level protocol claims that are certainly not needed by typical business logic. The process of turning raw incoming claims into application specific claims is called claims transformation. During this process you take the incoming claims, decide which claims you want to keep and maybe need to contact additional data stores to retrieve more claims that are required by the application.
+这是一个提升，但是仍然有一些低层的协议声明在典型的业务逻辑中并不需要。那么将原始传入的声明转换为应用相关的声明就叫做声明转换。在处理你的传入的声明期间，决定哪些声明你需要保留可能需要与额外的数据仓储进行通讯来检索你的应用需要用到的声明。
 
-The OIDC middleware has a notification that you can use to do claims transformation - the resulting claims will be stored in the cookie:
+OIDC 中间件有一个通知可以用于做声明转换——结果声明将会存储在 cookie 中：
 
 ```csharp
 app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
@@ -332,13 +339,13 @@ app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
                 {
                     var id = n.AuthenticationTicket.Identity;
 
-                    // we want to keep first name, last name, subject and roles
+                    // 我们想要保留名，姓，主体和角色
                     var givenName = id.FindFirst(Constants.ClaimTypes.GivenName);
                     var familyName = id.FindFirst(Constants.ClaimTypes.FamilyName);
                     var sub = id.FindFirst(Constants.ClaimTypes.Subject);
                     var roles = id.FindAll(Constants.ClaimTypes.Role);
 
-                    // create new identity and set name and role claim type
+                    // 创建新的身份并设置名和角色声明类型
                     var nid = new ClaimsIdentity(
                         id.AuthenticationType,
                         Constants.ClaimTypes.GivenName,
@@ -349,7 +356,7 @@ app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
                     nid.AddClaim(sub);
                     nid.AddClaims(roles);
 
-                    // add some other app specific claim
+                    // 添加一些其它与应用相关的声明
                     nid.AddClaim(new Claim("app_specific", "some data"));                   
 
                     n.AuthenticationTicket = new AuthenticationTicket(
@@ -362,24 +369,25 @@ app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
     });
 ```
 
-After adding the above code, our claim set now looks like this:
+添加了上面的代码之后，我们的声明将会如下所示：
+
 ![transformed claims](https://cloud.githubusercontent.com/assets/1454075/4606148/00033a74-5211-11e4-8cec-ed456a271d6e.png)
 
-## Authorization
-Now that we have authentication and some claims, we can start adding simple authorization rules.
+## 授权 (Authorization)
 
-MVC has a built-in attribute called `[Authorize]` to require authenticated users, you could also use this attribute to annotate role membership requirements.
-We don't recommend this approach because this typically leads to code that mixes concerns like business/controller logic and authorization policy.
-We rather recommend separating the authorization logic from the controller which leads to cleaner code and better testability (read more [here](http://leastprivilege.com/2014/06/24/resourceaction-based-authorization-for-owin-and-mvc-and-web-api/)).
+现在，我们有了认证和一些声明，那么可以开始添加简单的授权规则了。
 
-### Resource Authorization
+MVC 有一个内置的属性叫做 `[Authorize]` ，它需要认证的用户，你也可以使用这个属性来标注角色成员资格需求。我们并不推荐这个方式，因为这通常会导致关注点杂糅，比如业务/controller 逻辑和授权策略。我们更推荐将授权逻辑与 controller 进行分离，这会带来更简洁的代码和更好的可测试性（阅读 [这篇文章](http://leastprivilege.com/2014/06/24/resourceaction-based-authorization-for-owin-and-mvc-and-web-api) 了解更多）
 
-To add the new authorization infrastructure and the new attribute, we add a Nuget package:
+### 资源授权 (Resource Authorization)
+
+添加一个 Nuget 包来增加新的授权基础结构和新属性：
+
 ```
 install-package Thinktecture.IdentityModel.Owin.ResourceAuthorization.Mvc
 ```
 
-Next we annotate the `Contact` action on the `Home` controller with an attribute that expresses that executing that action is going to `Read` the `ContactDetails` resource:
+接下来，我们对 `Home` controller 中的 `Contact` action 进行标注，使用一个能够表达当前执行行为的属性—— `Read` `ContactDetails` 资源：
 
 ```csharp
 [ResourceAuthorize("Read", "ContactDetails")]
@@ -391,7 +399,7 @@ public ActionResult Contact()
 }
 ```
 
-Note that the attribute is **not** expressing who is allowed to read the contacts - we separate that logic into an authorization manager that knows about actions, resources and who is allowed to do which operation in your application:
+注意这个属性 **并不是** 表达谁被允许读取联系人——我们将逻辑拆分进一个授权管理器，它知道 actions ，资源以及在应用中谁被允许做什么样的操作：
 
 ```csharp
 public class AuthorizationManager : ResourceAuthorizationManager
@@ -422,38 +430,39 @@ public class AuthorizationManager : ResourceAuthorizationManager
 }
 ```
 
-And finally we wire up the authorization manager into the OWIN pipeline in `Startup`:
+最后，我们在 `Startup` 中将授权管理器插入到 OWIN 管道中：
 
 ```csharp
 app.UseResourceAuthorization(new AuthorizationManager());
 ```
 
-Run the sample and step through the code to familiarize yourself with the flow.
+运行这个例子并浏览这些代码来使你熟悉这个流。
 
-### Role Authorization
+### 角色授权 (Role Authorization)
 
-However, if you do choose to use `[Authorize(Roles = "Foo,Bar")]` be aware that sites can be thrown into an infinite redirection loop when the current user is authenticated, but does not belong to one of the roles or users you pass into the `Authorize` attribute (verified in MVC 5.2). This undesirable outcome occurs because the `Authorize` attribute will set the action's result to 401 unauthorized when the user is authenticated, but not in one of the roles. That 401 result triggers a redirect to authenticate with IdentityServer, which authenticates and then redirects the user back, and then the redirect loop begins. This behavior can be overcome by overriding the `Authorize` attribute's `HandleUnauthorizedRequest` method as follows, and then use the customized authorization attribute instead of what comes with MVC.
+然而，如果你选择使用 `[Authorize(Roles = "Foo,Bar")]` ，那么请明白一件事，就是如果当前用户经过了认证，但是用户并不属于 `Authorize` 属性中的任一个角色（MVC 5.2 已证实），那么站点将会进入无线重定向循环。这个不良的结果是因为 `Authorize` 属性在用户是认证的情况下，但是并不属于当中的某个角色会将 action 的结果设置为 401 。这个 401 结果会触发到 IdentityServer 进行认证，而认证会继续将用户重定向回去，然后又开启了新一轮的重定向。这种行为可以通过重写 `Authorize` 属性的 `HandleUnauthorizedRequest` 方法来解决，方法如下，然后使用这个自定义的授权属性来替换 MVC 提供的授权属性。
+
 
 ```csharp
-// Customized authorization attribute:
+// 修改后的授权属性：
 public class AuthAttribute : AuthorizeAttribute
 {
     protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
     {
         if (filterContext.HttpContext.User.Identity.IsAuthenticated)
         {
-            // 403 we know who you are, but you haven't been granted access
+            // 403 我们知道你是谁，但是你并没有被许可访问
             filterContext.Result = new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden);
         }
         else
         {
-            // 401 who are you? go login and then try again
+            // 401 你是谁？先去登录然后再试一次
             filterContext.Result = new HttpUnauthorizedResult();
         }
     }
 }
 
-// Usage:
+// 使用：
 [Auth(Roles = "Geek")]
 public ActionResult About()
 {
@@ -461,8 +470,9 @@ public ActionResult About()
 }
 ```
 
-## More authorization and dealing with access denied scenarios
-Let's do a bit more authorization by adding a new action method to the `Home` controller:
+## 更多关于授权以及处理访问拒绝的场景 (More authorization and dealing with access denied scenarios)
+
+让我们在授权上多做一点事，现在 `Home` controller 中添加一个新的 action 方法：
 
 ```csharp
 [ResourceAuthorize("Write", "ContactDetails")]
@@ -474,13 +484,13 @@ public ActionResult UpdateContact()
 }
 ```
 
-When you try to invoke that action by navigating to the `/home/updatecontact` URL you will see a `forbidden` error page. 
+当你尝试导航到 `/home/updatecontact` URL 来调用这个 action 的时候，你将会看到一个 `forbidden` 错误页。
 
 ![iis forbidden](https://cloud.githubusercontent.com/assets/1454075/4611482/35584714-52bb-11e4-97f1-12be348905d7.png)
 
-In fact you will see different response based on the fact if the user is already authenticated or not. If not MVC will redirect to the login page, if authenticated, you will see the forbidden response. This is by design (read more [here](http://leastprivilege.com/2014/10/02/401-vs-403/)).
+事实上，基于用户是否经过认证会出现不同的响应。如果没有经过认证 MVC 将会重定向到登录页面，如果经过认证，那么将会看到 forbidden 响应。这是设计使然（了解更多，参见 [这里](http://leastprivilege.com/2014/10/02/401-vs-403/)）。
 
-You can handle the forbidden condition by checking for `403` status codes - we provide such a filter out of the box:
+我们可以通过检测 `403` 状态码来处理禁止情形——我们一个开箱即用的过滤器：
 
 ```csharp
 [ResourceAuthorize("Write", "ContactDetails")]
@@ -493,11 +503,11 @@ public ActionResult UpdateContact()
 }
 ```
 
-The `HandleForbidden` filter (which can also be global of course) will redirect to a specified view whenever a 403 got emitted - by default we look for a view called `Forbidden`.
+`HandleForbidden` 过滤器（当然也可以是全局的）将会在任何时候发出 403 的时候重定向到一个指定的视图——默认我们会查找一个称为 `Forbidden` 视图。
 
 ![forbidden](https://cloud.githubusercontent.com/assets/1454075/4611314/0fcaa7aa-52b9-11e4-8a1a-c158a3d89697.png)
 
-You can also use the authorization manager imperatively, which gives you even more options:
+你还可以使用授权管理器，这会给你提供更多的选择：
 
 ```csharp
 [HandleForbidden]
@@ -505,7 +515,7 @@ public ActionResult UpdateContact()
 {
     if (!HttpContext.CheckAccess("Write", "ContactDetails", "some more data"))
     {
-        // either 401 or 403 based on authentication state
+        // 不管 401 还是 403 都基于认证状态
         return this.AccessDenied();
     }
 
@@ -514,8 +524,9 @@ public ActionResult UpdateContact()
 }
 ```
 
-## Adding Logout
-Adding logout is easy, simply add a new action that calls the `Signout` method in the Katana authentication manager:
+## 添加布局 (Adding Logout)
+
+添加布局是很简单的，简单添加一个新的 action 并调用 Katana 认证管理器的 `Signout` 方法：
 
 ```csharp
 public ActionResult Logout()
@@ -525,13 +536,13 @@ public ActionResult Logout()
 }
 ```
 
-This will initiate a roundtrip to the so called _endsession_ endpoint on IdentityServer. This endpoint will clear the authentication cookie and terminate your session:
+这会在 IdentityServer *endsession* 端点间初始化一个往返。这个端点将会清空认证 cookie 并终止你的会话：
 
 ![simple logout](https://cloud.githubusercontent.com/assets/1454075/4641154/71d7e23a-5432-11e4-9fb7-94dc8d53e5d0.png)
 
-Typically the most secure thing to do now would be to simply close the browser window to get rid of all session data. Some applications though would like to give the user a chance to return as an anonymous user.
+通常来说，现在做的最安全的事就是简单地关闭浏览器窗口来摆脱所有的会话数据。一些应用也会给用户一个机会返回到匿名用户的状态。
 
-This is possible, but requires some steps - first you need to register a valid URL to return to after the logout procedure is complete. This is done in the client definition for the MVC application (note the new `PostLogoutRedirectUris` setting):
+这是可能的，但是需要完成一些步骤——首先你得注册一个合法的 URL 供登出处理过程完成之后来返回。对于 MVC 应用这是在客户端定义中做的（注意这个新的 `PostLogoutRedirectUris` 设置）：
 
 ```csharp
 new Client 
@@ -553,16 +564,16 @@ new Client
 
 ```
 
-Next the client has to prove its identity to the logout endpoint to make sure we redirect to the right URL (and not some spammer/phishing page). This is done by sending the initial identity token back that the client received during the authentication process. So far we have discarded this token, now it's the time to change the claims transformation logic to preserve it.
+接下来，客户端需要向登出端点证实它的身份来确保我们将会重定向到正确的 URL （而不是一些垃圾/钓鱼页面）。这是通过发送客户端在认证过程中获取到的初始身份令牌实现的。而现在，我们已经丢弃了这个令牌，是时候更改声明转换来保存它了。
 
-This is accomplished by adding this line of code to our `SecurityTokenValidated` notification:
+在 `SecurityTokenValidated` 通知中添加下面这行代码：
 
 ```csharp
-// keep the id_token for logout
+// 为登出保存 id_token
 nid.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
 ```
 
-And as a last step, we have to attach the id_token when the user logs out and we make the roundtrip to IdentityServer. This is also done using a notification on the OIDC middleware:
+最后一个步骤，在用户登出的时候我们需要附加上 id_token 来向 IdentityServer 发起一个来回。这在 OIDC 中间件中也是通过使用一个通知来完成的。 
 
 ```csharp
 RedirectToIdentityProvider = n =>
@@ -581,49 +592,51 @@ RedirectToIdentityProvider = n =>
     }
 ```
 
-With these changes, IdentityServer will give the user a link back to the calling application:
+有了这些改变，IdentityServer 将会给用户提供一个链接供用户返回到调用应用：
 
 ![logout with redirect](https://cloud.githubusercontent.com/assets/1454075/4641278/b7db4130-5434-11e4-94c3-6f3ff2d5d0ce.png)
 
-**Tip** On the `IdentityServerOptions` you can find an `AuthenticationOptions` object. This has a property called `EnablePostSignOutAutoRedirect`. As you probably would expect, setting this to true will automatically redirect back to the client after logout.
+**Ti提示p** 在 `IdentityServerOptions` 中你可能发现到一个 `AuthenticationOptions` 对象。它有一个属性叫做 `EnablePostSignOutAutoRedirect` 。正如你想的那样，将这个设置为 `true` 在登出之后会自动将用户重定向回客户端。 
 
-## Adding Google Authentication
-Next we want to enable external authentication. This is done by adding additional Katana authentication middleware to IdentityServer - for our example we will use Google.
+## 添加 Google 认证 (Adding Google Authentication)
 
-### Registering IdentityServer with Google
-First of all we need to register IdentityServer at Google's developer console. This consists of a few steps.
+接下来我们想要启用外部认证。这需要向 IdentityServer 添加额外的 Katana 认证中间件来实现——在我们的例子中会使用 Google 。
 
-First navigate to:
+### 使用 Google 注册 IdentityServer (Registering IdentityServer with Google)
+
+首先我们需要在 Google 的开发者控制台中注册 IdentityServer 。这包含了下面的几个步骤：
+
+首先，导航到：
 
 https://console.developers.google.com
 
-**Create a new Project**
+**创建一个新项目**
 
 ![googlecreateproject](https://cloud.githubusercontent.com/assets/1454075/4843029/d6a3eb68-602c-11e4-83a1-edfceea419e5.png)
 
-**Enable the Google+ API**
+**启用 Google+ API**
 
 ![googleapis](https://cloud.githubusercontent.com/assets/1454075/4843041/ebb8ed46-602c-11e4-8932-73b48d6a83fc.png)
 
-**Configure the consent screen with email address and product name**
+**使用 email 地址和产品名称来注册同意屏幕 (consent screen)**
 
 ![googleconfigureconsent](https://cloud.githubusercontent.com/assets/1454075/4843066/2214d8fa-602d-11e4-8686-f6d6ba6ab6e8.png)
 
-**Create a client application**
+**创建一个客户端应用**
 
 ![googlecreateclient](https://cloud.githubusercontent.com/assets/1454075/4843077/44071554-602d-11e4-9214-191168ba425a.png)
 
-After you create the client application, the developer console will show you a client id and a client secret. We will need these two values later when we configure the Google middleware.
+在创建完客户端应用之后，开发者控制台将会给你提供一个客户端 id 和一个客户端 secret 。在后面配置 Google 中间件的时候会使用到这两个值。
 
-### Adding the Google authentication middleware
+### 添加 Google 认证中间件 (Adding the Google authentication middleware)
 
-Add the middleware by installing the following package:
+安装下面的包来添加中间件：
 
 `install-package Microsoft.Owin.Security.Google`
 
-### Configure the middleware
+### 配置中间件 (Configure the middleware)
 
-Add the following method to your `Startup`:
+向 `Startup` 中添加下面的代码：
 
 ```csharp
 private void ConfigureIdentityProviders(IAppBuilder app, string signInAsType)
@@ -641,8 +654,7 @@ private void ConfigureIdentityProviders(IAppBuilder app, string signInAsType)
 
 ```
 
-Next we point our IdentityServer options class to this method:
-
+接下来我们将 IdentityServer 选项类指向到这个方法：
 
 ```csharp
 idsrvApp.UseIdentityServer(new IdentityServerOptions
@@ -662,30 +674,32 @@ idsrvApp.UseIdentityServer(new IdentityServerOptions
 });
 ```
 
-That's it! The next time the user logs in - there will be a "Sign-in with Google" button on the login page:
+就是这样！下一次我们登录的时候——在登录页上面就会出现一个 "Sign-in with Google" ：
 
 ![googlesignin](https://cloud.githubusercontent.com/assets/1454075/4843133/46d07194-602e-11e4-9530-c84b6544bfcb.png)
 
-Notice that the `role` claim is missing when signing-in with Google. That makes sense since Google does not have the concept of roles. Be prepared that not all identity providers will offer the same claim types.
+注意当使用 Google 登录的时候会丢失 `role` 声明。 这在情理之中，由于 Google 并没有角色这个概念。要做好准备，并不是所有的身份验证提供商都会提供相同的声明类型。
 
+# 第二部分——添加并调用 Web API (Part 2 - Adding and calling a Web API)
 
-# Part 2 - Adding and calling a Web API
-In this part we'll be adding a Web API to the solution. The API will be secured by IdentityServer. Next our MVC application will call the API using both the trust subsystem and identity delegation approach.
+在这部分，我们将会在解决方案中添加一个 Web API 。这个 API 将由 IdentityServer 保护。接下来，我们的 MVC 应用将会调用同时使用信任的子系统和身份委托方式来调用 API 。
 
-## Adding the Web API Project
-The easiest way to create a clean API project is by adding an empty web project.
+## 添加 Web API 项目 (Adding the Web API Project)
+
+创建一个干净的 API 项目最简单的方式就是添加一个空的 Web 项目。
 
 ![add empty api](https://cloud.githubusercontent.com/assets/1454075/4625264/e745ebda-5373-11e4-827a-122ad39b7ef0.png)
 
-Next we'll add Web API and Katana hosting using Nuget:
+接下来我们使用 Nuget 来添加 Web API 和 Katana 宿主：
 
 ```
 install-package Microsoft.Owin.Host.SystemWeb
 install-package Microsoft.Aspnet.WebApi.Owin
 ```
 
-## Adding a Test Controller
-The following controller will return all claims back to the caller - this will allow us to inspect the token that will get sent to the API.
+## 添加一个测试 Controller (Adding a Test Controller)
+
+下面的 controller 会将所有的声明返还给调用者——这将允许我们审查发送给 API 的令牌。
 
 ```csharp
 [Route("identity")]
@@ -707,15 +721,16 @@ public class IdentityController : ApiController
 }
 ```
 
-## Wiring up Web API and Security in Startup
-As always with Katana-based hosting, all configuration takes place in `Startup`:
+## 在 Startup 中接入 Web API 和安全 (Wiring up Web API and Security in Startup)
+
+基于 Katana 托管的应用，所有的配置总是发生在 `Startup` 中：
 
 ```csharp
 public class Startup
 {
     public void Configuration(IAppBuilder app)
     {
-        // web api configuration
+        // Web API 配置
         var config = new HttpConfiguration();
         config.MapHttpAttributeRoutes();
 
@@ -724,19 +739,18 @@ public class Startup
 }
 ```
 
-In addition we want to secure our API using IdentityServer - two things are needed for that:
+除了使用 IdentityServer 来保护我们的 API ——还需要做两件事：
 
-* accept only tokens issued by IdentityServer
-* accept only tokens that are issued for our API - for that we'll give the API a name of *sampleApi* (also called `scope`)
+* 仅接收由 IdentityServer 颁发的令牌
+* 仅接收为我们 API 颁发的令牌——为此，我们将会给 API 一个 *sampleApi* 名称（也称为 `scope`）
 
-To accomplish that, we add a Nuget packages:
+想要实现这个，我们需要添加一个 Nuget 包：
 
 ```
 install-package IdentityServer3.AccessTokenValidation
 ```
 
-..and use them in `Startup`:
-
+..并在 `Startup` 中使用它们：
 
 ```csharp
 public class Startup
@@ -749,7 +763,7 @@ public class Startup
             RequiredScopes = new[] { "sampleApi" }
         });
         
-        // web api configuration
+        // Web API 配置
         var config = new HttpConfiguration();
         config.MapHttpAttributeRoutes();
 
@@ -758,12 +772,13 @@ public class Startup
 }
 ```
 
-**Note**
-IdentityServer issues standard JSON Web Tokens (JWT), and you could use the plain Katana JWT middleware to validate them. Our middleware is just a convenience since it can auto-configure itself using the IdentityServer discovery document (metadata).
+**注意**
 
-## Registering the API in IdentityServer
+IdentityServer 颁发标准的 JSON Web Tokens (JWT) ，你可以使用简单的 Katana JWT 中间件来验证它们。我们的中间件很便捷是由于它可以使用 IdentityServer discovery 文档 (metadata) 来自动完成配置。
 
-Next we need to register the API - this is done by extending the scopes. This time we add a so called resource scope:
+## 在 IdentityServer 中注册 API (Registering the API in IdentityServer)
+
+接下来我们需要注册 API ——通过扩展域来完成。这一次，我们会添加一个所谓的资源域：
 
 ```csharp
 public static class Scopes
@@ -799,12 +814,13 @@ public static class Scopes
 }
 ```
 
-## Registering a Web API Client
-Next we will call the API. You can do that either as using client credentials (think service account) or by delegating the users identity.
-We will start with the client credentials.
+## 注册一个 Web API 客户端 (Registering a Web API Client)
 
-First we need to register a new client for the MVC app. For security reasons, IdentityServer only allows one flow per client,
-and since our existing MVC client already uses implicit flow, we need to create a new client for the service to service communication.
+接下来我们将要调用 API 。你既可以使用客户端凭据（认为是服务账号）也可以代表用户身份来完成。
+
+我们先使用客户端凭据。
+
+首先，我们需要为 MVC 应用注册一个新的客户端。为了安全考虑，IdentityServer 只允许每个客户端采用一种流方式，由于我们现在的 MVC 客户端已经使用了隐式流，我们需要为服务创建一个新的客户端来进行服务通信。
 
 ```csharp
 public static class Clients
@@ -855,21 +871,22 @@ public static class Clients
 }
 ```
 
-**Remark** The above snippet locks down the scopes that can be accessed by the various clients using the `AllowedScopes` setting.
+**备注** 上面的代码片段使用 `AllowedScopes` 设置锁定了客户端可以访问的域的范围。
 
-## Calling the API
-Calling the API consists of two parts:
+## 调用 API (Calling the API)
 
-* Requesting a token for the API from IdentityServer using the client credentials
-* Calling the API using the access token
+调用 API 包含两个部分：
 
-To make the interaction with the OAuth2 token endpoint easier, add the Client package to the MVC project via Nuget:
+* 使用客户端凭据从 IdentityServer 为 API 请求一个令牌
+* 使用这个访问令牌来调用 API
+
+要想在 OAuth2 令牌端点间的交互更加简单，可以通过 Nuget 包向 MVC 应用添加客户端包：
 
 ```
 install-package IdentityModel
 ```
 
-Under Controller, add the new class CallApiController. The following code snippet requests the token for *sampleApi* using the client credentials:
+在 `Controller` 目录下，添加一个新的 `CallApiController` 类。下面的代码片段使用客户端凭据为 *sampleApi* 请求令牌：
 
 ```csharp
 private async Task<TokenResponse> GetTokenAsync()
@@ -883,7 +900,7 @@ private async Task<TokenResponse> GetTokenAsync()
 }
 ```
 
-Whereas the following snippet calls our identity endpoint using the requested access token:
+下面的代码片段就是使用获取到的访问令牌来访问我们的身份端点：
 
 ```csharp
 private async Task<string> CallApi(string token)
@@ -896,7 +913,7 @@ private async Task<string> CallApi(string token)
 }
 ```
 
-Bringing that all together, a newly added controller calls the service and displays the resulting claims on a view:
+将所有的放在一起，一个新添加的 controller 用来访问服务并在视图中展示声明结果：
 
 ```csharp
 public class CallApiController : Controller
@@ -911,11 +928,11 @@ public class CallApiController : Controller
         return View("ShowApiResult");
     }
 
-    // helpers omitted
+    // 忽略掉的助手方法
 }
 ```
 
-Create `ShowApiResult.cshtml` file, simple view to see results:
+创建 `ShowApiResult.cshtml` 文件，一个简单的视图来展示结果：
 
 ````html
 <h2>Result</h2>
@@ -923,31 +940,30 @@ Create `ShowApiResult.cshtml` file, simple view to see results:
 <pre>@ViewBag.Json</pre>
 ````
 
-The result will look like this:
+结果如下：
 
 ![callapiclientcreds](https://cloud.githubusercontent.com/assets/1454075/4625853/2ba6d94a-537b-11e4-9ad0-3be144a913f0.png)
 
-In other words - the API knows about the caller:
+也就是说——API 对访问者有如下了解：
 
-* the issuer name, audience and expiration (used by the token validation middleware)
-* for which scope the token was issued (used by the scope validation middleware)
-* the client id
+* 颁发者名称，audience 和过期时间（用于令牌验证中间件）
+* 令牌中所颁发的域（用于域验证中间件）
+* 客户端 id
 
-All claims in the token will be turned into a ClaimsPrincipal and are available via the *.User* property on the controller.
+所有的声明将会转换为一个 ClaimsPrincipal ，在 controller 中可以通过 *.User* 属性获取到。
 
-## Calling the API on behalf of the User
-Next we want to call the API using the user's identity. This is accomplished by adding the `sampleApi` scope to the list of scopes in the OpenID Connect middleware configuration. We also need to indicate that we want to request an access token by changing the response type:
+## 代表用户访问 API (Calling the API on behalf of the User)
 
+接下来我们想要使用用户的身份来访问 API 。可以通过在 OpenID Connect 中间件配置中将 `sampleApi` 域添加到域列表中实现。我们也需要通过更改相应类型来指示想要请求一个访问令牌：
 
 ```csharp
 Scope = "openid profile roles sampleApi",
 ResponseType = "id_token token"
 ```
 
-As soon as a response type of `token` is requested, IdentityServer stops including the claims in the identity token. This is for optimization purposes, since you now have an access token that allows retrieving the claims from the userinfo endpoint and while keeping the identity token small.
+当发出 `token` 的响应类型的请求，IdentityServer 就不会在身份令牌中包含声明了。这是处于优化的目的，由于你现在已经有了访问令牌，它允许你可以从 userinfo 端点获取声明，因此使得身份令牌尽可能小。
 
-Accessing the userinfo endpoint is not hard - the `UserInfoClient` class can make this even simpler. In addition we also now store the access token in the cookie, so we can use it whenever we want to access the API on behalf of the user:
-
+访问 userinfo 端点并不难——`UserInfoClient` 类甚至使这个工作更加简单。另外，我们也需要在 cookie 中存储访问令牌，所以，当我们想要代表用户访问 API 的时候就会使用到它：
 
 ```csharp
 SecurityTokenValidated = async n =>
@@ -957,7 +973,7 @@ SecurityTokenValidated = async n =>
             Constants.ClaimTypes.GivenName,
             Constants.ClaimTypes.Role);
 
-        // get userinfo data
+        // 获取 userinfo 数据
         var userInfoClient = new UserInfoClient(
             new Uri(n.Options.Authority + "/connect/userinfo"),
             n.ProtocolMessage.AccessToken);
@@ -965,16 +981,16 @@ SecurityTokenValidated = async n =>
         var userInfo = await userInfoClient.GetAsync();
         userInfo.Claims.ToList().ForEach(ui => nid.AddClaim(new Claim(ui.Item1, ui.Item2)));
 
-        // keep the id_token for logout
+        // 为登出保存 id_token
         nid.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
 
-        // add access token for sample API
+        // 为示例 API 添加访问令牌
         nid.AddClaim(new Claim("access_token", n.ProtocolMessage.AccessToken));
 
-        // keep track of access token expiration
+        // 跟踪访问令牌过期时间
         nid.AddClaim(new Claim("expires_at", DateTimeOffset.Now.AddSeconds(int.Parse(n.ProtocolMessage.ExpiresIn)).ToString()));
 
-        // add some other app specific claim
+        // 添加其它与应用相关的声明
         nid.AddClaim(new Claim("app_specific", "some data"));
 
         n.AuthenticationTicket = new AuthenticationTicket(
@@ -983,11 +999,11 @@ SecurityTokenValidated = async n =>
     }
 ```
 
-Another option would be to reconfigure the scopes in IdentityServer and set the `AlwaysIncludeInIdToken` flag on the scope claims to force inclusion of the claims in the identity token - I'll leave that as an exercise for the reader.
+另一个选线就是在 IdentityServer 中重新配置域并且在域声明中设置 `AlwaysIncludeInIdToken` 标志来强制在身份令牌中包含声明——这是留给读者的一个练习。
 
-**Calling the API**
+**访问 API (Calling the API)**
 
-Since the access token is now stored in the cookie, we can simply retrieve it from the claims principal and use it to call the service:
+由于现在访问令牌已经存储在 cookie 中了，我们现在可以简单地从声明主体中检索它，并使用它来访问服务：
 
 ```csharp
 // GET: CallApi/UserCredentials
@@ -1002,11 +1018,11 @@ public async Task<ActionResult> UserCredentials()
 }
 ```
 
-After having signed in you can now see on the result page that the `sub` claim is included, which means that the API is now working on behalf of a user:
+登录之后，你就会在结果页面中看到已经包含了 `sub` 声明，这意味着 API 已经代表用户了：
 
 ![userdelegation](https://cloud.githubusercontent.com/assets/1454075/5453086/246392fc-8523-11e4-9a3f-8100af390d53.png)
 
-If you now add a scope claim for `role` to the `sampleApi` scope - the roles of the user will be included in the access token as well:
+如果你现在在 `sampleApi` 域中添加一个 `role` 域声明——用户的角色同样也会被包含在访问令牌中：
 
 ```csharp
 new Scope
