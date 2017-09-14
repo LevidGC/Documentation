@@ -2,13 +2,13 @@
 layout: docs-default
 ---
 
-# UserInfo Endpoint
+# UserInfo 端点 (UserInfo Endpoint)
 
-The UserInfo endpoint can be used to retrieve identity information about a subject. It requires a valid access token with at least the 'openid' scope.
+UserInfo 端点可以用于检索一个主体 (subject) 的身份信息。它需要一个合法的访问令牌以及至少拥有 `openid` 域。
 
-see [spec](http://openid.net/specs/openid-connect-core-1_0.html#UserInfo)
+参见 [spec](http://openid.net/specs/openid-connect-core-1_0.html#UserInfo)
 
-### Example
+### 示例 (Example)
 
 ```
 GET /connect/userinfo
