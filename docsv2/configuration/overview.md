@@ -2,9 +2,9 @@
 layout: docs-default
 ---
 
-# Overview
+# 概览 (Overview)
 
-IdentityServer3 is packaged as middleware and uses the typical "Options" patterns for configuration:
+IdentityServer3 是一个中间件包，使用典型的 "Options" 模式来做配置：
 
 ```csharp
 public void Configuration(IAppBuilder appBuilder)
@@ -19,13 +19,11 @@ public void Configuration(IAppBuilder appBuilder)
 }
 ```
 
-The `IdentityServerOptions` class contains all configuration for IdentityServer.
-One part consists of simple properties like the issuer name or site title which you can source from wherever you see fit (static in code, configuration file or database).
-The other part is the so called service factory which acts as a registry for certain aspects of IdentityServer's internal processing.
+`identityServerOption` 类攘括了 IdentityServer 的所有配置。一部分是由简单的属性构成的，比如 issuer name 或者 site title, 这些数据可以存放在你认为合理的任何地方（代码中的静态部分，配置文件或者数据库）。另一部分就是所谓的服务工厂，作为 IdentityServer 某些特定内部处理过程来注册。
 
-#### Hosting in IIS and RAMMFAR
+#### IIS 托管和 RAMMFAR (Hosting in IIS and RAMMFAR)
 
-The files for the web pages are served up as embedded assets within the IdentityServer assembly itself. When hosting in IIS or IIS Express to allow these files to be served RAMMFAR (_runAllManagedModulesForAllRequests_) needs to be enabled in web.config:
+Web 页面相关的文件是作为嵌入式资产存放在 IdentityServer 程序集当中的。当使用 IIS 或者 IIS Express 托管的时候，需要在 `web.config` 中启用 RAMMFAR (_runAllManagedModulesForAllRequests_) ：
 
 ```
 <system.webServer>
@@ -34,4 +32,4 @@ The files for the web pages are served up as embedded assets within the Identity
 </system.webServer>
 ```
 
-See the [samples](https://github.com/IdentityServer/IdentityServer3.Samples) repo for various examples of IIS and self-hosting.
+更多 IIS 与自托管相关的例子，请访问 [samples](https://github.com/IdentityServer/IdentityServer3.Samples) 。
