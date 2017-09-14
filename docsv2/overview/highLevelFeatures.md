@@ -2,22 +2,24 @@
 layout: docs-default
 ---
 
-# High Level Features
+# 高级特性 (High Level Features)
 
-## Authentication as a Service
-Centralized login logic and workflow at a single & well-secured place.
+## 认证即服务 (Authentication as a Service)
 
-## Single Sign-on / Sign-out
-Single sign-on (and out) over multiple application types like web or mobile.
+集中的登录逻辑以及一个独立、高度安全的工作流。
 
-## Access Control for APIs
-Issue access tokens for APIs for various types of clients, e.g. server to server, web applications, SPAs and
-native/mobile apps.
+## 单点登录 / 登出 (Single Sign-on / Sign-out)
 
-## Federation
-Support for external social identity providers like Google, Facebook etc, as well as integration for enterprise
-identity management systems via SAML and WS-Federation.
+在多种应用类型，比如 Web 或者移动设备上进行单点登录（和登出）。
 
-## Customization everywhere
-The most important part - every aspect of IdentityServer can be customized to fit **your** needs.
-Since IdentityServer is a framework, you can write code to adapt the system in a way it makes sense for your scenarios.
+## API 的访问控制 (Access Control for APIs)
+
+给多种类型的客户端颁发 APIs 的访问令牌，比如，服务器到服务器，Web 应用，SPAs 和本地/移动应用。
+
+## 联合 (Federation)
+
+支持外部社交身份提供商，比如 Google, Facebook 等，同样集成了企业使用的 SAML 和 WE-Federation 身份管理系统。
+
+## 随处自定义 (Customization everywhere)
+
+最重要的部分——IdentityServer 的每一个方面都可以根据 **你的** 需求来自定义。由于 IdentityServer 是一个框架，您可以编写代码来使系统适应您的场景。
