@@ -2,38 +2,37 @@
 layout: docs-default
 ---
 
-# Token Endpoint
+# 令牌端点 (Token Endpoint)
 
-The token endpoint can be used to programmatically request or refresh tokens (resource owner password credential flow, authorization code flow, client credentials flow and custom grant types).
+令牌端点可用于请求或者刷新令牌（资源所有者密码凭据流，授权码流，客户端凭据流以及自定义许可类型）。
 
-### Supported Parameters
+### 支持的参数 (Supported Parameters)
 
-See [spec](http://openid.net/specs/openid-connect-core-1_0.html#TokenRequest).
+参见 [spec](http://openid.net/specs/openid-connect-core-1_0.html#TokenRequest).
 
-- `grant_type` (required)
-    - `authorization_code`, `client_credentials`, `password`, `refresh_token` or custom
-- `scope` (required for all grant types besides refresh_token and code)
-- `redirect_uri` (required for code grant type)
-- `code` (required for code grant)
-- `code_verifier` (required when using proof keys - added in v2.5)
-- `username` (required for password grant type)
-- `password` (required for password grant_type)
-- `acr_values` (allowed for password grant type to pass additional information to user service)
-    - there are values with special meaning:
-        - `idp:name_of_idp` bypasses the login/home realm screen and forwards the user directly to the selected identity provider (if allowed per client configuration)
-        - `tenant:name_of_tenant` can be used to pass extra information to the user service
-- `refresh_token` (required for refresh token grant)
-- `client_id` (either in the post body, or as a basic authentication header)
-- `client_secret` (either in the post body, or as a basic authentication header)
+- `grant_type` （必选）
+    - `authorization_code`, `client_credentials`, `password`, `refresh_token` 或自定义
+- `scope` （对于所有许可类型除了 refresh_token 和 code 外为必选）
+- `redirect_uri` （code 许可类型为必选）
+- `code` （code 许可为必选）
+- `code_verifier` （当使用 proof keys 时为必选 - v2.5 中添加)
+- `username` （密码许可类型为必选）
+- `password` （密码许可类型为必选）
+- `acr_values` （在密码许可类型中可向用户传递额外的信息）
+    - 一些具有特殊含义的值：
+        - `idp:name_of_idp` 绕过 login/home 领域 (realm) 屏幕，并将用户直接转发到所选的身份提供商 (identity provider) （如果每个客户端配置允许）
+        - `tenant:name_of_tenant` 可用于向用户服务传递额外的信息
+- `refresh_token` （刷新令牌许可为必选）
+- `client_id` （既可以在 post body 中，也可以作为基础认证 (basic authentication) 的 header）
+- `client_secret` （既可以在 post body 中，也可以作为基础认证 (basic authentication) 的 header）
 
-### Authentication
-All requests to the token endpoint must be authenticated - either pass client id and secret via Basic Authentication
-or add `client_id` and `client_secret` fields to the POST body.
+### 认证 (Authentication)
+所有发送到令牌端点的请求必须被认证 - 既可以通过基础认证来传递客户端 id 和 secret 也可以在 POST body 中添加 `client_id` 和 `client_secret` 字段
 
-When providing the `client_id` and `client_secret` in the `Authorization` header it is expected to be:
+当在 `Authorization` 中提供 `client_id` 和 `client_secret` 时应使用如下形式：
 
 * `client_id:client_secret`
-* Base64 encoded
+* Base64 编码
 
 ```csharp
 var clientId = "...";
@@ -45,8 +44,8 @@ var credentials = string.Format("{0}:{1}", clientId, clientSecret);
 var headerValue = Convert.ToBase64String(encoding.GetBytes(credentials));
 ```
 
-### Example
-(Form-encoding removed and line breaks added for readability)
+### 示例 (Example)
+（为了可读性移除了表单编码并增加了换行）
 
 ```
 POST /connect/token
