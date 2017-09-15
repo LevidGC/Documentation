@@ -4,9 +4,9 @@ layout: docs-default
 
 # Secrets
 
-Secrets define how machines (e.g. a client or a scope) can authenticate with IdentityServer.
+Secret 定义了机器（比如，client 或 scope）怎么使用 IdentityServer 来认证。
 
-Example of a secret definition for a client:
+Client secret 定义示例：
 
 ```csharp
 var client = new Client
@@ -23,7 +23,7 @@ var client = new Client
 };
 ```
 
-Example of a secret definition for a scope:
+Scope secret 定义示例：
 
 ```csharp
 var scope = new Scope
@@ -39,31 +39,23 @@ var scope = new Scope
 };
 ```
 
-The above snippets sets a shared secret of value `secret` - and hashes it with SHA256.
-The `ClientSecret` property is a list, which indicates that a client can have more than one secret.
-This is useful for key rotation.
+上面的代码片段将 `secret` 值设为共享的 secret ——并使用 SHA256 进行哈希。`ClientSecret` 是一个列表，也就是说 client 可以有多个 secret 。这对于 key rotation 很有用。
 
-Let's have a look at the `Secret` class in more detail:
+让我们仔细看一下 `Secret` 类：
 
-* `Value` The value of the secret. This is being interpreted by the secret validator (e.g. a "password"-like share secret
-    or something else that identifies a credential)
-* `Description` The description of the secret - useful for attaching some extra information to the secret
-* `Expiration` A point in time, where this secret will expire
-* `Type` Some string that gives the secret validator a hint what type of secret to expect (e.g. "SharedSecret" or "X509CertificateThumbprint")
+* `Value` secret 的值。通过 secret validator 翻译（比如，一个类 "password" 的共享 secret 或者其它标识凭据的东西）
+* `Description` secret 的描述——用于将其它信息附加到 secret 上
+* `Expiration` secret 过期的时间点
+* `Type` 一些用于向 secret validator 提示 secret 的类型的字符串（比如，"SharedSecret" 或者 "X509CertificateThumbprint"）
 
-## Secret parsers
-There are a number of ways how a client could transmit a secret - the OAuth2 specification mentions HTTP Basic Authentication
-or using POST body values. IdentityServer additionally supports X.509 client certificates (see [here](../advanced/clientCerts.html)).
+## Secret 解析 (Secret parsers)
 
-Secret parsing is an extensibility point - if you need to support different means of transmitting a secret 
-besides the above mentioned mechanisms, you can implement the `ISecretParser` interface and add your
-implementation to the `SecretParsers` collection on the service factory.
+client 传输 secret 有多种方式—— OAuth2 规范提及了 HTTP Basic 认证或使用 POST body 。另外 IdentityServer 还支持 X.509 client 证书（参见 [这里](../advanced/clientCerts.html)）。
 
-## Secret validation
-After the secret has been extracted from the incoming request, it must be validated.
-By default we support shared secrets stored either using SHA256 or SHA512 hashing and X.509 certificates (by default
-the certificate thumbprint is used to authenticate the caller).
+Secret 解析是一个扩展点——如果你想支持除了上面所提及的机制来传输 secret ，那么你可以实现 `ISecretParser` 接口并将你的实现在服务工厂里添加到 `SecretParsers` 集合中。
 
-Secret validation is also an extensibility point - if you need to support different validation methods, e.g. X.509 certificates
-distinguished names with chain/peer trust, you can implement the `ISecretValidator` interface and add your
-implementation to the `SecretValidators` collection on the service factory.
+## Secret 验证 (Secret validation)
+
+从传入的请求中提取出 secret 后，必须要对它进行验证。默认，我们支持使用 SHA256 或 SHA512 哈希或者 X.509 证书（证书指纹默认用于对访问者进行认证）存储的共享 secret 。
+
+Secret 验证也是一个扩展点——如果你需要支持不同的验证方法，比如，X.509 证书使用 chain/peer 可信任的专有名称，你可以实现 `ISecretValidator` 接口并将你的实现在服务工厂里添加到 `SecretValidators` 集合中。
