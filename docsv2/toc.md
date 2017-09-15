@@ -24,7 +24,7 @@ permalink: /docsv2/
 * [客户端 (Clients)](configuration/clients.html)
 * [域和声明 (Scopes and Claims)](configuration/scopesAndClaims.html)
 * [Secrets](configuration/secrets.html)
-* [Keys, Signatures and Cryptography](configuration/crypto.html)
+* [密钥，签名和加密 (Keys, Signatures and Cryptography)](configuration/crypto.html)
 * [Authentication Options](configuration/authenticationOptions.html)
 * [Identity Providers](configuration/identityProviders.html)
 * [HSTS](configuration/hsts.html)
