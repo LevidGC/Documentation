@@ -2,47 +2,47 @@
 layout: docs-default
 ---
 
-# Scopes and Claims
+# 域和声明 (Scopes and Claims)
 
-**The `IdentityServer.Core.Models.Scope` class models an OpenID Connect or OAuth2 scope.**
+**`IdentityServer.Core.Models.Scope` 类是对 OpenID Connect 或者 OAuth2 域的一个建模。**
 
 * `Enabled`
-    * Indicates if scope is enabled and can be requested. Defaults to `true`.
+    * 指示域是否启用并可被请求。默认为 `true` 。
 * `Name`
-    * Name of the scope. This is the value a client will use to request the scope.
+    * 域的名称。客户端会使用这个值来请求域。
 * `DisplayName`
-    * Display name for consent screen.
+    * 在 consent screen 中显示的名称。
 * `Description`
-    * Description for the consent screen.
+    * 在 consent screen 中的描述。
 * `Required`
-    * Specifies whether the user can de-select the scope on the consent screen. Defaults to `false`.
-*  `ScopeSecrets` (added in v2.2)
-    * Adds secret to scope (for the introspection endpoint) - see also [here](secrets.html).
-*  `AllowUnrestrictedIntrospection` (added in v2.3)
-    * Allows this scope to see all other scopes in the access token when using the introspection endpoint
+    * 指定用户是否可以在 consent screen 中反选这个域。默认为 `false` 。
+*  `ScopeSecrets` （v2.2 新增）
+    * 在域中添加 secret （用于自省端点）——参见 [这里](secrets.html) 。
+*  `AllowUnrestrictedIntrospection` （v2.3 新增）
+    * 当时用自省端点的时候允许这个域能看到访问令牌中其它所有的域。
 * `Emphasize`
-    * Specifies whether the consent screen will emphasize this scope. Use this setting for sensitive or important scopes. Defaults to `false`.
+    * 指定在 consent screen 中是否强调这个域。对于敏感或者重要的域使用这个设置。默认为 `false` 。
 * `Type`
-    * Either `Identity` (OpenID Connect related) or `Resource` (OAuth2 resources). Defaults to `Resource`.
+    * `Identity` （OpenID Connect 相关）或 `Resource` （OAuth2 资源）。默认为 `Resource` 。
 * `Claims`
-    * List of user claims that should be included in the identity (identity scope) or access token (resource scope). 
+    * 应该包括在身份令牌（身份域）或者访问令牌（资源域）中的用户声明列表。
 * `IncludeAllClaimsForUser`
-    * If enabled, all claims for the user will be included in the token. Defaults to `false`.
+    * 如启用，用户的所有声明将会包含在令牌中。默认为 `false` 。
 * `ClaimsRule`
-    * Rule for determining which claims should be included in the token (this is implementation specific)
+    * 决定什么声明应该包含在令牌中的规则（明确实现）。
 * `ShowInDiscoveryDocument`
-    * Specifies whether this scope is shown in the discovery document. Defaults to `true`.
+    * 指定这个域是否显示在 discovery 文档中。默认为 `true` 。
 
-**Scope can also specify claims that go into the corresponding token - the `ScopeClaim` class has the following properties:**
+**域也可以将声明指定到对应的令牌中—— `ScopeClaim` 类有以下的属性：**
 
 * `Name`
-    * Name of the claim
+    * 声明名称
 * `Description`
-    * Description of the claim
+    * 声明描述
 * `AlwaysIncludeInIdToken`
-    * Specifies whether this claim should always be present in the identity token (even if an access token has been requested as well). Applies to identity scopes only. Defaults to `false`.
+    * 指定当前声明是否应该总是存在与身份令牌中（即使也请求了访问令牌）。只应用在身份域上。默认为 `false` 。
 
-**Example of a `role` identity scope:**
+**`role` 身份域示例：**
 
 ```csharp
 var roleScope = new Scope
@@ -58,10 +58,9 @@ var roleScope = new Scope
     }
 };
 ```
-The 'AlwaysIncludeInIdentityToken' property specifies that a certain claim should always be part of the identity token, 
-even when an access token for the userinfo endpoint is requested.
+'AlwaysIncludeInIdentityToken' 属性用于指定某个特定的声明应该总是为身份令牌的一部分，即使为 userinfo 端点请求了访问令牌。
 
-**Example of a scope for the `IdentityManager` API:**
+**一个 `IdentityManager` API的域示例：**
 
 ```csharp
 var idMgrScope = new Scope
