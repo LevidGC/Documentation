@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-_site/
-.sass-cache/
-=======
 # Created by .ignore support plugin (hsz.mobi)
 ### Jekyll template
 _site/
@@ -57,5 +53,4 @@ crashlytics.properties
 crashlytics-build.properties
 
 
->>>>>>> translation-zh-cn
 Gemfile.lock
