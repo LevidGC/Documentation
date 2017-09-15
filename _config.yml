@@ -2,7 +2,7 @@
 title: IdentityServer3
 email: identity@leastprivilege.com
 description: IdentityServer
-baseurl: "/Documentation" # the subpath of your site, e.g. /blog/
+baseurl: "/IdentityServer3-docs" # the subpath of your site, e.g. /blog/
 url: "https://identityserver.github.io" # the base hostname & protocol for your site
 twitter_username: identityserver
 github_username: identityserver
