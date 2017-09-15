@@ -1,9 +1,11 @@
-IdentityServer3 文档（中文）
+IdentityServer3 文档
 ============================================
 
 > 个人翻译，不代表官方意图。
 
-站点：https://identityserver.github.io/Documentation/
+官方站点：https://identityserver.github.io/Documentation/
+个人译文站点：https://levid-gc.github.io/IdentityServer3-docs/
+
 
 ## 如何构建
 
