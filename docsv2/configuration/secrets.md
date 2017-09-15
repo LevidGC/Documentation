@@ -4,7 +4,7 @@ layout: docs-default
 
 # Secrets
 
-Secret 定义了机器（比如，client 或 scope）怎么使用 IdentityServer 来认证。
+Secret 定义了机器（比如，client 或 scope）该怎么使用 IdentityServer 来认证。
 
 Client secret 定义示例：
 
