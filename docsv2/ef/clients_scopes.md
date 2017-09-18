@@ -2,26 +2,26 @@
 layout: docs-default
 ---
 
-# Clients and Scopes
+# Client 和 Scope (Clients and Scopes)
 
-## Stores
+## 仓储 (Stores)
 
 ### ClientStore
 
-The `ClientStore` is the EF-based implementation of the `IClientStore` interface. It can be used independently from the `ScopeStore`.  
+`ClientStore` 是对 `IClientStore` 接口基于 EF 的实现。它可以独立于 `ScopeStore` 使用。  
 
 ### ScopeStore
 
-The `ScopeStore` is the EF-based implementation of the `IScopeStore` interface. It can be used independently from the `ClientStore`. 
+`ScopeStore` 是对 `IScopeStore` 接口基于 EF 的实现。它可以独立于 `ClientStore` 使用。 
 
-## Registration
+## 注册 (Registration)
 
-To use either of the stores, they need to be registered. There are extension methods on the `IdentityServerServiceFactory` that allow either or both of the stores to be configured. All of the extension methods accept an `EntityFrameworkServiceOptions` which contains these properties:
+使用任意一个仓储，你都需要对其注册。`IdentityServerServiceFactory` 提供了扩展方法来注册这两个仓储。所有的扩展方法都接收一个 `EntityFrameworkServiceOptions` ，它包含以下的属性：
 
-* `ConnectionString`: The name of the connection string as configured in the `.config` file.
-* `Schema`: An optional database schema to use for the tables. If not provided, then the database default will be used.
+* `ConnectionString`：配置在 `.config` 文件中的连接字符串名称。
+* `Schema`：可选的数据库表模式。如果没有提供，则使用数据库默认的表模式。
 
-To configure the stores independently, this code could be used:
+独立配置仓储的代码如下：
 
 ```csharp
 var efConfig = new EntityFrameworkServiceOptions {
@@ -34,8 +34,7 @@ factory.RegisterClientStore(efConfig);
 factory.RegisterScopeStore(efConfig);
 ``` 
 
-If both stores will be used with the same `EntityFrameworkServiceOptions`, then a single convenient extension method is provided:
-
+如果两个仓储使用的是同样的 `EntityFrameworkServiceOptions` ，那么可以使用一个便捷的扩展方法：
 ```csharp
 var efConfig = new EntityFrameworkServiceOptions {
    ConnectionString = "SomeConnectionName",
