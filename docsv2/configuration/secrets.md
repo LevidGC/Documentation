@@ -46,7 +46,7 @@ var scope = new Scope
 * `Value` secret 的值。通过 secret validator 翻译（比如，一个类 "password" 的共享 secret 或者其它标识凭据的东西）
 * `Description` secret 的描述——用于将其它信息附加到 secret 上
 * `Expiration` secret 过期的时间点
-* `Type` 一些用于向 secret validator 提示 secret 的类型的字符串（比如，"SharedSecret" 或者 "X509CertificateThumbprint"）
+* `Type` 一些用于向 secret validator 提示 secret 的类型的字符串（比如，"SharedSecret" 或者 "X509 证书指纹"）
 
 ## Secret 解析 (Secret parsers)
 
