@@ -22,7 +22,7 @@ permalink: /docsv2/
 * [服务工厂 (Service Factory)](configuration/serviceFactory.html)
 * [驻内存服务和仓储 (In-Memory Services and Stores)](configuration/inMemory.html)
 * [客户端 (Clients)](configuration/clients.html)
-* [域和声明 (Scopes and Claims)](configuration/scopesAndClaims.html)
+* [Scope 和 Cliam (Scopes and Claims)](configuration/scopesAndClaims.html)
 * [Secrets](configuration/secrets.html)
 * [密钥，签名和加密 (Keys, Signatures and Cryptography)](configuration/crypto.html)
 * [Authentication Options](configuration/authenticationOptions.html)
