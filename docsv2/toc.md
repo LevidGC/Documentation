@@ -48,8 +48,8 @@ permalink: /docsv2/
 ### Advanced
 
 * [Refresh Tokens](advanced/refreshTokens.html)
-* [Registering Services](advanced/customServices.html)
-* [DI for Services](advanced/di.html)
+* [注册服务 (Registering Services)](advanced/customServices.html)
+* [服务的依赖注入 (DI for Services)](advanced/di.html)
 * [Caching for client, scope, and user stores](advanced/caching.html)
 * [Customizing Views](advanced/customizingViews.html)
 * [Localizing messages](advanced/localization.html)

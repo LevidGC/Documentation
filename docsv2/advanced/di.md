@@ -2,22 +2,17 @@
 layout: docs-default
 ---
 
-# Dependency Injection
+# 依赖注入 (Dependency Injection)
 
-**The sample for this topic can be found [here](https://github.com/IdentityServer/IdentityServer3.Samples/tree/master/source/DependencyInjection)**
+**此部分示例参见 [这里](https://github.com/IdentityServer/IdentityServer3.Samples/tree/master/source/DependencyInjection)**
 
-IdentityServer3 has extensibility points for various services.
-The default implementations of these services are designed to be decoupled from other moving parts of IdentityServer
-and as such we use dependency injection to get everything wired up.
+IdentityServer3 中多个服务支持扩展。这些服务的默认实现设计时彼此相互分离，因此我们使用了依赖注入来将所有东西整合在一起。
 
-## Injecting IdentityServer services
+## 注入 IdentityServer 服务 (Injecting IdentityServer services)
 
-The default services provided by IdentityServer can be replaced by the hosting application if desired.
-Custom implementations can also use dependency injection and have IdentityServer types or even custom types injected.
-This is only supported with custom services and stores that are registered using a `Registration`.
+如果需要，IdentityServer 提供的默认服务可以在宿主应用中替换掉。自定义的实现同样可以使用依赖注入注入 IdentityServer 类型或者甚至是自定义的类型。这仅在使用 `Registration` 方法来注册的自定义服务和仓储中受支持。
 
-For custom services to accept types defined by IdentityServer, simply indicate those dependencies as constructor arguments.
-When IdentityServer instantiates your registered type the constructor arguments will be resolved automatically. For example:
+对于接收 IdentityServer 中定义的类型的自定义服务，只需要简单地将这些依赖作为构造器参数就行。当 IdentityServer 实例化你注册的类型时，会自动解析它们。举个例子：
 
 ```csharp
 public class MyCustomTokenSigningService: ITokenSigningService
@@ -36,26 +31,23 @@ public class MyCustomTokenSigningService: ITokenSigningService
 }
 ```
 
-That was registered as such:
+注册方式如下：
 
 ```csharp
 var factory = new IdentityServerServiceFactory();
 factory.TokenSigningService = new Registration<ITokenSigningService>(typeof(MyCustomTokenSigningService));
 ```
 
-or alternatively with this syntax:
+也可以使用这个语法：
 
 ```csharp
 var factory = new IdentityServerServiceFactory();
 factory.TokenSigningService = new Registration<ITokenSigningService, MyCustomTokenSigningService>();
 ```
 
-## Injecting custom services
+## 注入自定义服务 (Injecting custom services)
 
-Your custom services might also have dependencies on your own types.
-Those can also be injected as long as they have been configured with IdentityServer’s dependency injection system.
-This is done by adding new registrations using the `IdentityServerServiceFactory`’s `Register()` method.
-For example, if you have a custom logger that is needed in your service:
+您的自定义服务也可以有您自己类型的依赖。您自己的类型也可以被注入进去，只需要您在 IdentityServer 的注入系统中有对应的配置。这是通过  `IdentityServerServiceFactory` 的 `Register()` 方法完成的。举个例子，在你的服务中需要一个自定义的 logger ：
 
 ```csharp
 public interface ICustomLogger
@@ -89,7 +81,7 @@ public class MyCustomTokenSigningService: ITokenSigningService
 }
 ```
 
-Then it would be registered as such:
+然后可以通过如下方式完成注册：
 
 ```csharp
 var factory = new IdentityServerServiceFactory();
@@ -97,11 +89,11 @@ factory.TokenSigningService = new Registration<ITokenSigningService, MyCustomTok
 factory.Register(new Registration<ICustomLogger, MyCustomDebugLogger>());
 ```
 
-### Custom services without an interface
+### 没有接口的自定义服务 (Custom services without an interface)
 
-In the above example the injected type was the `ICustomLogger` and the implementation was the `MyCustomDebugLogger`. If your custom services is not designed with an interface to separate the contract from the implementation, then the concrete type itself can be registered to be injected.
+在上面的例子中，注入的类型是 `ICustomLogger` ，其实现为 `MyCustomDebugLogger` 。如果您自定义的服务在设计时没有使用接口将契约与实现分离开，那么具体类型本身也可以注册用于注入。
 
-For example, if the `MyCustomTokenSigningService`'s constructor did not accept an interface for the logger, as such:
+举个例子，如下，`MyCustomTokenSigningService` 的构造器没有接收 logger 的接口：
 
 ```csharp
 public class MyCustomTokenSigningService: ITokenSigningService
@@ -116,7 +108,7 @@ public class MyCustomTokenSigningService: ITokenSigningService
 }
 ```
 
-Then the registration could instead be configured like this:
+然后注册使用如下方式配置：
 
 ```csharp
 var factory = new IdentityServerServiceFactory();
@@ -124,17 +116,17 @@ factory.TokenSigningService = new Registration<ITokenSigningService, MyCustomTok
 factory.Register(new Registration<MyCustomDebugLogger>());
 ```
 
-In short, this type of registration means that the `MyCustomDebugLogger` concrete type is the dependency type to be injected.
+简言之，这种类型的注册方式意味着 `MyCustomDebugLogger` 具体类型是需要被注入的依赖类型。
 
-## Customizing the creation
+## 自定义创建 (Customizing the creation)
 
-If it's necessary for your service to be constructed manually (e.g.  you need to pass specific arguments to the constructor), then you can use the `Registration` class that allows a factory callback to be used. This `Registration` has this signature:
+如果您的服务需要被手动构造（比如，您需要向构造器传递特定参数），然后您需要 `Registration` 类来使用一个工厂回调。这个 `Registration` 的签名如下：
 
 ```csharp
 new Registration<T>(Func<IDependencyResolver, T> factory) 
 ```
 
-The return value must be an instance of the `T` interface and an example might look like this:
+返回的值必须是 `T` 接口的一个实例，例子如下：
 
 ```csharp
 var factory = new IdentityServerServiceFactory();
@@ -143,9 +135,9 @@ factory.TokenSigningService = new Registration<ITokenSigningService>(resolver =>
 );
 ```
 
-### Obtaining other dependencies
+### 获取其它依赖 (Obtaining other dependencies)
 
-While this approach allows you the most flexibility to create your service, you still might require the use of other services. This is what the `IDependencyResolver` is used for. It allows you to get services from within your callback function. For example, if your custom client store requires a dependency on another service from within IdentityServer, it can be obtained as such:
+虽然这种方式可以使您最大程度地创建您的服务，但是您仍然需要使用到其它的服务。这就是 `IDependencyResolver` 的用途。它允许您在回调函数中获取服务。举个例子，如果在 IdentityServer 中您的自定义 client 仓储需要其它服务的依赖，它可以通过下面的方式实现：
 
 ```csharp
 var factory = new IdentityServerServiceFactory();
@@ -154,11 +146,11 @@ factory.TokenSigningService = new Registration<ITokenSigningService>(resolver =>
 );
 ```
 
-### Named dependencies
+### 命名的依赖 (Named dependencies)
 
-Finally, when registering custom dependencies via `IdentityServerServiceFactory`’s `Register()` method, the dependenciess can be named. This name is indicated via the `name` constructor parameter on the `Registration` class. This is only used for custom registrations and the name can only used when resolving dependencies with the `IDependencyResolver` from within the custom factory callback.
+最后，当通过 `IdentityServerServiceFactory` 的 `Register()` 方法注册自定义依赖的时候，依赖可以被命名。这个名称是通过 `Registration` 类中的 `name` 构造器参数指示的。这仅供自定义注册使用，并且名称仅可以在自定义工厂回调中 `IDependencyResolver` 解析依赖的时候使用。
 
-Named dependencies can be useful to register multiple instances of the same `T` yet provide a mechanism to distinguish the implementation desired. For example:
+命名的依赖在注册同个 `T` 类型的多个实例时非常有用，同时也提供了一个机制来区分这些实现。举个例子：
 
 ```csharp
 string mode = "debug"; // or "release", for example
@@ -173,15 +165,15 @@ factory.TokenSigningService = new Registration<ITokenSigningService>(resolver =>
 );
 ```
 
-In this example, the `mode` acts as a configuration flag to influence which impelmentation of the `ICustomLogger` will be used at runtime.
+在这个例子中，`mode` 用作一个配置标记，在运行时用于决定使用哪一个 `ICustomLogger` 的实现。
 
-## Instancing with the Registration Mode
+## 使用注册模式实例化 (Instancing with the Registration Mode)
 
-The `Registration` class allows a service to indicate how many instances of the service that will be created. The `Mode` property is an enum with these possible values:
+`Registration` 类允许服务指示需要多少个服务的实例将要被创建。`Mode` 属性就是这些可能值的一个枚举：
 
 * `InstancePerHttpRequest`
-    One instance will be created per HTTP request. This means that if the service is requested twice in a single dependency chain then the same instance will be shared.
+    每个 HTTP 请求一个实例。这就意味着如果服务在一个依赖链中被请求两次，将会共用同一个实例。
 * `InstancePerUse`
-    One instance will be created per location the service is needed. This means that if the service is requested twice in a single dependency chain then two separate instances will be created.
+    每个地方一个实例。这就意味着如果服务在一个依赖链中请求两次，将会创建两个不同的实例。
 * `Singleton`
-    Only one instance will ever be created. This mode is automatically assigned when using the `Registration` that accepts a singleton instance as the constructor parameter.
+    仅有一个实例被创建。当使用 `Registration` 时接收一个 singleton 实例作为构造器参数时，这个模式会自动被设置。
