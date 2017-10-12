@@ -23,16 +23,14 @@ IdentityServer3 为数据的存储，验证逻辑和支撑 IdentityServer 操作
 
 ## 注册自定义服务 (Registering custom Services)
 
-你可以替换每一个服务并注册其它自定义的服务。这是通过 `Registration` 类封装的。`Registration` 表示的就是 IdentityServer 获取你的服务实例的方方式。
+您可以替换每一个服务并注册其它自定义的服务。这是通过 `Registration` 类封装的。`Registration` 表示的就是 IdentityServer 获取您的服务实例的方式。
 
-Depending upon the design of your service you might want to have a new instance on every request, use a singleton,
-or you might require special instantiation logic each time an instance is needed.
-鉴于你的服务的设计，可能在每次请求的时候都会有一个新的实例，使用 singleton （单例），或者在每次创建实例的时候需要特殊的初始化逻辑。为了适应不同的情况，`Registration` 类提供了多种构造器供注册你的服务使用：
+鉴于您服务的设计，可能在每次请求的时候都会有一个新的实例，使用 singleton （单例），或者在每次创建实例的时候需要特殊的初始化逻辑。为了适应不同的情况，`Registration` 类提供了多种构造器供注册您的服务使用：
 
 * `new Registration<T>(Type yourImplementation)`
     * 将 `yourImplementation` 作为实现了 `T` 接口的类来注册。
 * `new Registration<T, Impl>()`
-    * 将 `Impl` 作为实现了 `T` 嗟阔的类来注册。这个接口是上一个的便捷版本。
+    * 将 `Impl` 作为实现了 `T` 接口的类来注册。这个接口是上一个的便捷版本。
 * `new Registration<T>(T singleton)`
     * 将 `singleton` 实例作为 `T` 接口的 singleton 实现来注册。
 * `new Registration<T>(Func<IDependencyResolver, T> factory)`
@@ -47,5 +45,5 @@ factory.UserService = new Registration<IUserService, MyCustomUserService>();
 
 ### 服务清理 (Service cleanup)
 
-除 Singleton 外，如果你的服务实现了 `IDisposable` 接口，那么在每次 HTTP 请求的结尾都会调用 `Dispose` 方法。
+除 Singleton 外，如果您的服务实现了 `IDisposable` 接口，那么在每次 HTTP 请求的结尾都会调用 `Dispose` 方法。
 
