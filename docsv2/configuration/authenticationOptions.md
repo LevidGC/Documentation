@@ -2,24 +2,24 @@
 layout: docs-default
 ---
 
-# Authentication Options
+# 认证选项 (Authentication Options)
 
-**The sample for this topic can be found [here](https://github.com/IdentityServer/IdentityServer3.Samples/tree/master/source/CustomUserService)**
+**本部分示例参见 [这里](https://github.com/IdentityServer/IdentityServer3.Samples/tree/master/source/CustomUserService)**
 
-The `AuthenticationOptions` is a property on the `IdentityServerOptions` to customize the login and logout views and behavior.
+ `AuthenticationOptions` 是 `IdentityServerOptions` 的一个属性，用于自定义登录和登出的视图和行为。
 
 * `EnableLocalLogin`
-    * Indicates if IdentityServer will allow users to authenticate with a local account. Disabling this setting will not display the username/password form on the login page. This also will disable the resource owner password flow. Defaults to `true`.
+    * 指示 IdentityServer 是否允许使用本地账户来验证用户。禁用这个设置将不会在登录页面展示用户名/密码表单。这也会禁用掉资源所有者密码流。默认为 `true` 。
 * `EnableLoginHint`
-    * Indicates whether the `login_hint` parameter is used to prepopulate the username field. Defaults to `true`.
+    * 指示 `login_hint` 参数是否用于预填充 username 字段。默认为 `true` 。
 * `LoginPageLinks`
-    * List of `LoginPageLink` objects. These allow the login view to provide the user custom links to other web pages that they might need to visit before they can login (such as a registration page, or a password reset page). 
-    * `LoginPageLink` contains:
-        * `Type`: An identifier for the type of link.
-        * `Text`: The text to appear in the link.
-        * `Href`: The URL for the `href` of the link.
-    * The custom web page represented by the `LoginPageLink` would be provided by the hosting application. Once it has performed its task then it can resume the login workflow by redirecting the user back to the login view.
-    * When a user follows one of the `LoginPageLink`s, a `signin` query string parameter is passed to the page. This parameter should be echoed back as a `signin` query string parameter to the login page when the user wishes to resume their login. The login view is located at the path "~/login" relative to IdentityServer's application base. 
+    * `LoginPageLink` 对象列表。这允许在登录视图上提供用户自定义链接，这些链接到的页面可能需要在登录之前访问（比如注册页面，或者密码重置页面）。
+    * `LoginPageLink` 包含：
+        * `Type`: 链接类型的标识符。
+        * `Text`: 链接上显示的文字。
+        * `Href`: 链接的 URL 。
+    * `LoginPageLink` 表示的自定义页面应该由宿主应用提供。一旦它完成了任务，就应该通过将用户重定向到登录视图恢复登录流。
+    * 当一个用户使用了一个 `LoginPageLink` 时，`signin` 查询字符串参数将会传递到这个页面。在用户想要恢复登录界面时需要将这个查询字符串参数作为 `siginin` 回传到登录界面。登录视图可以通过 "~/login" 路径定位到，它相对于 IdentityServer 的应用基地址。
 * `RememberLastUsername`
     * Indicates whether IdentityServer will remember the last username entered on the login page. Defaults to `false`.
 * `IdentityProviders`
