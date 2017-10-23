@@ -73,7 +73,7 @@ permalink: /docsv2/
 * [Diagnostics](consuming/diagnostics.html)
 
 ### Entity Framework support for Clients, Scopes, and Operational Data
-* [Overview](ef/overview.html)
+* [概览 (Overview)](ef/overview.html)
 * [Client 和 Scope (Clients and Scopes)](ef/clients_scopes.html)
 * [Operational Data](ef/operational.html)
 * [Schema Changes and Migrations](ef/migrations.html)
