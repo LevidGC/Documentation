@@ -66,11 +66,11 @@ permalink: /docsv2/
 * [Federated post-logout redirects](advanced/federated-post-logout-redirect.html)
 * [Invalidating existing login sessions](advanced/session-invalidation.html)
 
-### Consuming Tokens
+### 使用 Token (Consuming Tokens)
 
-* [The Katana Access Token Validation Middleware](consuming/overview.html)
-* [Options](consuming/options.html)
-* [Diagnostics](consuming/diagnostics.html)
+* [Katana Access Token 验证中间件 (The Katana Access Token Validation Middleware)](consuming/overview.html)
+* [选项 (Options)](consuming/options.html)
+* [诊断 (Diagnostics)](consuming/diagnostics.html)
 
 ### Entity Framework 对 Client ，Scope 和操作型数据的支持 (Entity Framework support for Clients, Scopes, and Operational Data)
 * [概览 (Overview)](ef/overview.html)
@@ -96,8 +96,8 @@ permalink: /docsv2/
 * [Requesting PoP Tokens](pop/requesting.html)
 * [Consuming PoP Tokens](pop/consuming.html)
 
-### Resources
+### 资源 (Resources)
 
-* [Overview](resources/home.html)
-* [Community Add-ons](resources/community.html)
-* [Middleware for external Authentication](resources/externalAuthentication.html)
+* [概览 (Overview)](resources/home.html)
+* [社区扩展 (Community Add-ons)](resources/community.html)
+* [外部认证中间件 (Middleware for external Authentication)](resources/externalAuthentication.html)
