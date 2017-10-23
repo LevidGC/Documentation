@@ -2,10 +2,9 @@
 layout: docs-default
 ---
 
-The validation middleware uses the standard Katana [logging](https://katanaproject.codeplex.com/wikipage?title=Debugging&referringTitle=Documentation) facilities.
+验证中间件使用标准的 Katana [日志](https://github.com/aspnet/AspNetKatana) 设施。
 
-By default Katana uses the `TraceSource` mechanism in .NET for logging. 
-Add the following snippet to your config file to enable logging to a file:
+默认情况，Katana 在 .NET 中使用 `TraceSource` 机制来做日志。将以下片段添加到您的配置文件来将日志记录到文件： 
 
 ```xml
 <system.diagnostics>

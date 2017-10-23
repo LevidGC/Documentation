@@ -2,29 +2,28 @@
 layout: docs-default
 ---
 
-# The Katana Access Token Validation Middleware
+# Katana Access Token 验证中间件 (The Katana Access Token Validation Middleware)
 
-Consuming IdentityServer access tokens in web APIs is easy - you simply drop in our token validation middleware
-into your Katana pipeline and set the URL to IdentityServer. All configuration and validation is done for you.
+在 Web API 中使用 IdentityServer access token 是很简单的——您只需要将我们的验证中间件放入到您的 Katana 管道中并将 URL 设置到 IdentityServer 。所有的配置和验证都已经为您实现了。
 
-You can get the middleware here: [nuget](https://www.nuget.org/packages/IdentityServer3.AccessTokenValidation/)
-or [source code](https://github.com/IdentityServer/IdentityServer3.AccessTokenValidation).
+您可以在这里获取到中间件：[nuget](https://www.nuget.org/packages/IdentityServer3.AccessTokenValidation/)
+或者 [源码](https://github.com/IdentityServer/IdentityServer3.AccessTokenValidation).
 
-High level features:
+高级特性：
 
-* Support for validating both JWT and reference tokens
-* Support for validating scopes
-* Built-in configurable in-memory cache for caching reference token validation results
-* Cache implementation can be replaced
+* 支持 JWT 和 reference token 的验证
+* 支持 scope 的验证
+* 内置可配置的 in-memory 缓存用于缓存 reference token 验证结果
+* 缓存配置可以被替换
 
-The typical use case is, that you provide the URL to IdentityServer and the scope name of the API:
+典型的用例是，您提供 IdentityServer 的 URL 和 API 的 scope 名称：
 
 ```csharp
 public class Startup
 {
     public void Configuration(IAppBuilder app)
     {
-        // turn off any default mapping on the JWT handler
+        // 关闭 JWT 句柄的任何默认映射
         JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
         app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
@@ -38,7 +37,4 @@ public class Startup
 }
 ```
 
-The middleware will first inspect the token - if it is a JWT, token validation will be done locally
-(using the issuer name and key material found in the discovery document).
-If the token is a reference token, the middleware will use the access token validation [endpoint](../endpoints/accessTokenValidation.html)
-on IdentityServer (or the [introspection endpoint](../endpoints/introspection.html) is credentials are configured).
+中间件首先会检查 token ——如果是 JWT ，token 验证会在本地完成（使用在 discovery 文档中找到的签署方名称和 key 材质）。如果 token 是 reference token ，中间件将会使用 IdentityServer 中的 access token 验证 [端点](../endpoints/accessTokenValidation.html)（如果配置了凭据就会使用 [自省端点](../endpoints/introspection.html)）。
