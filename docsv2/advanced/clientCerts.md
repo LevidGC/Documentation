@@ -2,16 +2,15 @@
 layout: docs-default
 ---
 
-# Authenticating Clients using X.509 Certificates
+# 使用 X.509 证书验证客户端 (Authenticating Clients using X.509 Certificates)
 
-Often client authentication is accomplished using shared keys (aka client secrets). Another option is to use X.509
-client certificates.
+通常客户端的验证是通过共享的 key 实现的（也就是 client secret）。另一种方式就是使用 X.509 证书。
 
-## Registering the client
-You are in full control of how you want to map a client certificate to a corresponding client secret by implementing `ISecretValidator`.
-The default implementation uses the thumbprint of the certificate to map to the right client.
+## 注册客户端 (Registering the client)
 
-The following snippet registers a client for client credentials flow:
+你可以通过实现 `ISecretValidator` 接口来完全控制怎么将一个客户端证书映射到对应的 client secret 。默认的实现是将证书的指纹映射到对应的客户端。
+
+下面的片段为客户端凭据流注册一个客户端：
 
 ```csharp
 var certClient = new Client
@@ -38,10 +37,9 @@ var certClient = new Client
 }
 ```
 
-## Configuring the host
+## 配置宿主 (Configuring the host)
 
-You need to configure your host to accept client certificates. For IIS you need to create a location element for the token
-endpoint that configures the client cert and SSL settings:
+你需要配置宿主来接收客户端证书。对于 IIS ，你需要为 token 端点创建一个 location 元素来配置客户端证书和 SSL 设置：
 
 ```xml
 <location path="core/connect/token">
@@ -53,13 +51,11 @@ endpoint that configures the client cert and SSL settings:
 </location>
 ```
 
-**Remark** The SSL settings are locked down by default in IIS - you might need to set them to `Read/Write` in the feature
-delegation configuration.
+**备注** 默认情况下 IIS 是锁定 SSL 设置的——你可能需要在特性委托配置中将它们设置为 `Read/Write` 。
 
-## Requesting the token
+## 请求 token (Requesting the token)
 
-To request a token, you need to supply the client certificate to the HTTP client and add the client ID to the post body.
-The following example uses the IdentityModel OAuth2 client:
+想要请求 token ，你需要为 HTTP 客户端提供客户端证书并将客户端 ID 添加到请求体中。以下示例使用的是 IdentityModel OAuth2 客户端：
 
 ```csharp
 async Task<TokenResponse> RequestTokenAsync()
