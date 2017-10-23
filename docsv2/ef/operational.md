@@ -2,18 +2,18 @@
 layout: docs-default
 ---
 
-# Operational Data
+# 操作型数据 (Operational Data)
 
-For many of IdentityServer3's features a database is required to persist various operational data. This includes authorization codes, refresh tokens, reference tokens, and user consent. 
+IdentityServer3 的许多特性需要数据库来持久化操作型数据。这包括授权码，refresh token ，reference token 和用户同意。
 
-## Registration
+## 注册 (Registration)
 
-There are a variety of stores that will persist the operational data. These are configured with a single extension method on `IdentityServerServiceFactory`. All of the extension methods accept an `EntityFrameworkServiceOptions` which contains these properties:
+有许多仓储用于持久化操作型数据。这些都是通过 `IdentityServerServiceFactory`。所有的扩展方法都接收一个 `EntityFrameworkServiceOptions` ，它包含以下属性：
 
-* `ConnectionString`: The name of the connection string as configured in the `.config` file.
-* `Schema`: An optional database schema to use for the tables. If not provided, then the database default will be used.
+* `ConnectionString`：配置在 `.config` 文件中的连接字符串名称。
+* `Schema`：可选的数据库表模式名称。如果没有提供，则使用数据库默认值。
 
-To configure the operational data stores this code could be used:
+以下代码用于配置操作型数据仓储：
 
 ```csharp
 var efConfig = new EntityFrameworkServiceOptions {
@@ -25,9 +25,9 @@ var factory = new IdentityServerServiceFactory();
 factory.RegisterOperationalServices(efConfig);
 ``` 
 
-## Data Cleanup
+## 数据清理 (Data Cleanup)
 
-Much of the operational data has an expiration. It is likely desirable to remove this stale data after it expires. This can be done outside of the application that hosts IdentityServer or by the database itself (via various mechanisms). If it is desired that application code that you perform this cleanup, then the `TokenCleanup` class is provided to assist. It accepts a `EntityFrameworkServiceOptions` and an `Int32` interval (in seconds) to configure how frequently the stale data is cleared. It will asynchronously connect to the database and can be configured as such:
+大多数操作型数据都有过期时间。所以最好是将这些旧的数据在过期后清除掉。这可以在托管 IdentityServer 的宿主应用之外或者数据库中实现（可以通过多种机制）。如果你想让应用代码帮你执行这样的清理，那么 `TokenCleanup` 类将会帮到你。它接收一个 `EntityFrameworkServiceOptions` 和一个 `Int32` 间隔（秒）用于配置旧的数据被清理的频率。它将会异步地连接数据库，配置如下：
 
 ```csharp
 var efConfig = new EntityFrameworkServiceOptions {
