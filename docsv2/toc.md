@@ -72,10 +72,10 @@ permalink: /docsv2/
 * [Options](consuming/options.html)
 * [Diagnostics](consuming/diagnostics.html)
 
-### Entity Framework support for Clients, Scopes, and Operational Data
+### Entity Framework 对 Client ，Scope 和操作型数据的支持 (Entity Framework support for Clients, Scopes, and Operational Data)
 * [概览 (Overview)](ef/overview.html)
 * [Client 和 Scope (Clients and Scopes)](ef/clients_scopes.html)
-* [Operational Data](ef/operational.html)
+* [操作型数据 (Operational Data)](ef/operational.html)
 * [Schema Changes and Migrations](ef/migrations.html)
 	* [Migrating from 1.x to 2.0](ef/migrations_to_v2.html)
     * [Using Entity Framework migrations with SQL Azure](ef/sql_azure.html)
