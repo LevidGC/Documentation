@@ -47,7 +47,7 @@ permalink: /docsv2/
 
 ### Advanced
 
-* [Refresh Tokens](advanced/refreshTokens.html)
+* [Refresh Token (Refresh Tokens)](advanced/refreshTokens.html)
 * [注册服务 (Registering Services)](advanced/customServices.html)
 * [服务的依赖注入 (DI for Services)](advanced/di.html)
 * [Caching for client, scope, and user stores](advanced/caching.html)
@@ -57,7 +57,7 @@ permalink: /docsv2/
 * [User Service](advanced/userService.html)
 * [OWIN environment extension methods](advanced/owin.html)
 * [Deployment](advanced/deployment.html)
-* [Authenticating Clients with X.509 Certificates](advanced/clientCerts.html)
+* [使用 X.509 证书验证客户端 (Authenticating Clients with X.509 Certificates)](advanced/clientCerts.html)
 * [Custom Grant Types](advanced/customGrantTypes.html)
 * [Signout](advanced/signout.html)
   * [Session Management](advanced/signout-session.html)

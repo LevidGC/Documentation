@@ -2,7 +2,7 @@
 layout: docs-default
 ---
 
-# Middleware for external Authentication
+# 外部认证中间件 (Middleware for external Authentication)
 
 ## Microsoft Katana
 
@@ -15,8 +15,8 @@ layout: docs-default
 
 ## SAML2p
 
-* [KentorIT Authentication Services](https://github.com/KentorIT/authservices) - see also [this](http://coding.abel.nu/2015/01/saml2-for-thinktecture-identityserver-3-with-kentor-authservices/) blog post
+* [KentorIT Authentication Services](https://github.com/KentorIT/authservices) - 参见 [这个](http://coding.abel.nu/2015/01/saml2-for-thinktecture-identityserver-3-with-kentor-authservices/) 博客
 
-## Other community contributions
+## 其它社区贡献 (Other community contributions)
 
 * [OWIN OAuth Providers](https://github.com/owin-middleware/OwinOAuthProviders) (Google+, Yahoo, LinkedIn, GitHub, Instagram, StackExchange, Battle.net...)
