@@ -2,67 +2,54 @@
 layout: docs-default
 ---
 
-# The big Picture
+> [原文](https://identityserver.github.io/Documentation/docsv2/overview/bigPicture.html)
 
-Most modern applications look more or less like this:
+# 整体概况 (The big Picture)
+
+大多数现代应用的架构多少和下图中的相似：
 
 ![modern application architecture]({{ site.baseurl }}/assets/images/appArch.png)
 
-The typical interactions are:
+典型的交互是：
 
-* Browsers communicate with web applications
+* 浏览器与 Web 应用通讯
 
-* Web applications communicate with web APIs (sometimes on their own, sometimes on behalf of a user)
+* Web 应用与 Web API 通讯（有时代表它们自己，有时代表用户）
 
-* Browser-based applications communicate with web APIs
+* 基于浏览器的应用与 Web API 通讯
 
-* Native applications communicate with web APIs
+* 本地应用与 Web API 通讯
 
-* Server-based applications communicate with web APIs
+* 基于服务器端的应用与 Web API 通讯
 
-* Web APIs communicate with web APIs (sometimes on their own, sometimes on behalf of a user)
+* Web API 之间互相通讯（有时代表它们自己，有时代表用户）
 
-Typically each and every layer (front-end, middle-tier and back-end) has to protect resources and
-implement authentication and/or authorization – and quite typically against the same user store.
+通常来说每一层（前端，中间层和后端）都需要对资源进行保护并实现验证及（或）授权——并且一般是针对相同的用户存储。
 
-This is why we don’t implement these fundamental security functions in the business applications/endpoints themselves,
-but rather outsource that critical functionality to a service - the security token service.
+这就是我们为什么不在业务应用/端点中实现这些基础的安全功能，而是将这些重要的功能外包给一个服务的原因——安全令牌服务 (STS) 。
 
-This leads to the following security architecture and usage of protocols:
+这就促生了下面的安全架构以及协议的使用：
 
 ![security protocols]({{ site.baseurl }}/assets/images/protocols.png)
 
-This divides the security concerns into two parts.
+这就将安全问题分为了两个部分：
 
-**Authentication**
+**验证**
 
-Authentication is needed when an application needs to know about the identity of the current user.
-Typically these applications manage data on behalf of that user and need to make sure that this user can only
-access the data he is allowed to. The most common example for that is (classic) web applications –
-but native and JS-based applications also have need for authentication.
+当应用需要知道当前用户的身份时就需要用到验证。通常这些应用帮用户管理他们的数据，因此需要确保用户只能访问他们所被允许访问的那部分数据。最常见的例子就是（典型的） Web 应用——但是本地应用和基于 JS 的应用也需要验证。
 
-The most common authentication protocols are SAML2p, WS-Federation and OpenID Connect – SAML2p being the
-most popular and the most widely deployed.
+最常见的验证协议就是 SAML2p ，WS-Federation 和 OpenID Connect —— SAML2p 是用得最多并且是部署最广泛的。
 
-OpenID Connect is the newest of the three, but is generally considered to be the future because it has the
-most potential for modern applications. It was built for mobile application scenarios right from the start
-and is designed to be API friendly.
+OpenID Connect 是这三个当中最新的一个，也是普遍被认为是未来可能用得最多的一个，因为它针对现代应用来说最具潜力。一开始它就是针对移动应用场景做的构建并且 API 设计得很友好。
 
-**API Access**
+**API 访问**
 
-Applications have two fundamental ways with which they communicate with APIs – using the application identity,
-or delegating the user’s identity. Sometimes both ways need to be combined.
+应用与 API 通讯有两种基本的方式——使用应用身份或者代表用户身份。有时需要将两者结合起来使用。
 
-OAuth2 is a protocol that allows applications to request access tokens from a security token service and use them
-to communicate with APIs. This reduces complexity on both the client applications as well as the APIs since
-authentication and authorization can be centralized.
+OAuth2 是一个允许应用从安全令牌服务请求访问令牌并在与 API 的通讯中使用它们的协议。由于验证和授权的集中化，这会同时减小客户端应用和 API 的复杂度，
 
-**OpenID Connect and OAuth2 – better together**
+**OpenID Connect 和 OAuth2 ——结合起来使用更好**
 
-OpenID Connect and OAuth2 are very similar – in fact OpenID Connect is an extension on top of OAuth2.
-This means that you can combine the two fundamental security concerns – authentication and API access into a single protocol –
-and often a single round trip to the security token service.
+OpenID Connect 和 OAuth2 非常相似——事实上 OpenID Connect 是构建在 OAuth2 上的一个扩展。这就意味着你可以将两个基本安全问题结合起来——验证和 API 的访问结合到一个协议中——常常与安全令牌服务之间只需一个来回。
 
-This is why we believe that the combination of OpenID Connect and OAuth2 is the best approach to secure modern
-applications for the foreseeable future. IdentityServer3 is an implementation of these two protocols and is
-highly optimized to solve the typical security problems of today’s mobile, native and web applications.
+这就是为什么我们相信，在可预见的未来，OpenID Connect 和 OAuth2 的结合是确保现代应用程序安全的最佳方式。IdentityServer3 是这两个协议的一个实现，并且经过了高度的优化以解决如今移动，本地以及 Web 应用的安全问题。
