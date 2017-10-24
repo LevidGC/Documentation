@@ -2,15 +2,13 @@
 layout: docs-default
 ---
 
-# Logging
+# 日志 (Logging)
 
-IdentityServer has two logging related features. Development-time logging and production-time events ([see here](events.html)).
+IdentityServer 有两个日志相关的特性。开发时日志和生产时事件（[参见这里](events.html)）。
 
-Development-time logging produces a quite extensive output and is mostly useful for developers that customize IdentityServer.
-Logging might store sensitive data like passwords and thus is typically not suitable for production use.
+开发时日志会产生相当多的输出，大多数对开发者自定义 IdentityServer 来说都有用。日志可能存储像密码之类的敏感信息，因此对于生成时使用这通常是不适合的。
 
-IdentityServer uses [LibLog](https://github.com/damianh/LibLog) for logging. 
-Liblog picks up any of the following logging libraries automatically:
+IdentityServer 使用 [LibLog](https://github.com/damianh/LibLog) 完成日志。Liblog 会自动选取以下的日志类库：
 
 * NLog
 * Enterprise Library
@@ -18,25 +16,26 @@ Liblog picks up any of the following logging libraries automatically:
 * Log4Net
 * Loupe
 
-There is no IdentityServer3 specific configuration required - you just need to configure one of the above logging frameworks in your host.
+这里没有与 IdentityServer3 相关的配置——您只需要在宿主中配置当中的一个日志框架即可。
 
-*Warning: LibLog will pick the first library in the above order and will discard the others. So if you have a reference to SeriLog for example and you're trying to configure Log4net it will **not** work.*
+*警告：LibLog 会选取排序最上面的一个类库而将其余的全部抛弃。所以举个例子，如果您已经对 SeriLog 有了一个引用，那么再尝试配置 Log4net 将 **不会** 起作用。*
 
-## Configuring Diagnostics
-The `LoggingOptions` class has the following settings:
+## 配置诊断 (Configuring Diagnostics)
+
+`LoggingOptions` 类有以下设置：
 
 * `EnableWebApiDiagnostics`
-   * If enabled, Web API internal diagnostic logging will be forwarded to the log provider
+   * 如果启用，Web API 内部诊断日志将会转发给日志提供器
 * `WebApiDiagnosticsIsVerbose`
-   * If enabled, the Web API diagnostics logging will be set to verbose
+   * 如果启用，Web API 诊断日志将会被设置为 verbose 
 * `EnableHttpLogging`
-   * If enabled, HTTP requests and responses will be logged
+   * 如果启用，HTTP 请求和响应将会被记录
 * `EnableKatanaLogging`
-   * If enabled, the Katana log output will be logged (this is often useful to troubleshoot problems with external identity providers)
+   * 如果启用，Katana 日志输出将会被记录（这常常对于诊断外部身份提供器有用）
 
+## 示例：使用 Serilog 记录 System.Diagnostics 跟踪 (Example: Using Serilog to log to System.Diagnostics tracing)
 
-## Example: Using Serilog to log to System.Diagnostics tracing
-The following example wires up [Serilog](http://serilog.net/) to log to the diagnostics trace (put that e.g. in Startup or in your hosting code). 
+下面的示例整合进了 [Serilog](http://serilog.net/) 并用它来记录诊断跟踪（将其放置在 Startup 或者您的托管代码中）。
 **Note:** Serilog provides various logging sinks as separate packages, so you may need to install the Serilog.Sinks.Trace package to get `WriteTo.Trace()` to work as expected. 
 
 ```csharp
