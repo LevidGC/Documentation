@@ -1,12 +1,12 @@
 ---
 layout: page
-title: latest version
+title: 当前版本
 permalink: /docsv2/
 ---
 
 ### 概览 (Overview)
 
-* [The big Picture](overview/bigPicture.html)
+* [整体概况 (The big Picture)](overview/bigPicture.html)
 * [高级特性 (High level Features)](overview/highLevelFeatures.html)
 * [术语 (Terminology)](overview/terminology.html)
 * [特性和规范 (Features and Specifications)](overview/featuresAndSpecs.html)
@@ -25,12 +25,12 @@ permalink: /docsv2/
 * [域和声明 (Scopes and Claims)](configuration/scopesAndClaims.html)
 * [Secret (Secrets)](configuration/secrets.html)
 * [密钥，签名和加密 (Keys, Signatures and Cryptography)](configuration/crypto.html)
-* [Authentication Options](configuration/authenticationOptions.html)
+* [认证选项 (Authentication Options)](configuration/authenticationOptions.html)
 * [Identity Providers](configuration/identityProviders.html)
 * [HSTS](configuration/hsts.html)
 * [CORS](configuration/cors.html)
 * [Logging](configuration/logging.html)
-* [Events](configuration/events.html)
+* [事件 (Events)](configuration/events.html)
 
 ### 端点 (Endpoints)
 
@@ -59,12 +59,12 @@ permalink: /docsv2/
 * [Deployment](advanced/deployment.html)
 * [使用 X.509 证书验证客户端 (Authenticating Clients with X.509 Certificates)](advanced/clientCerts.html)
 * [Custom Grant Types](advanced/customGrantTypes.html)
-* [Signout](advanced/signout.html)
-  * [Session Management](advanced/signout-session.html)
+* [登出 (Signout)](advanced/signout.html)
+  * [会话管理 (Session Management)](advanced/signout-session.html)
   * [HTTP based logout](advanced/signout-http.html)
 * [Federated Signout](advanced/federated-signout.html)
 * [Federated post-logout redirects](advanced/federated-post-logout-redirect.html)
-* [Invalidating existing login sessions](advanced/session-invalidation.html)
+* [作废当前登录会话 (Invalidating existing login sessions)](advanced/session-invalidation.html)
 
 ### 使用 Token (Consuming Tokens)
 
