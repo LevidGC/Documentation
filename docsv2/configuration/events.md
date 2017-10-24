@@ -2,33 +2,33 @@
 layout: docs-default
 ---
 
-# Events
+> [原文](https://identityserver.github.io/Documentation/docsv2/configuration/events.html)
 
-IdentityServer raises a number of events at runtime, e.g:
+# 事件 (Events)
 
-* Successful/failed authentication (resource owner flow, pre, partial, local and external)
-* Token issued (identity, access, refresh tokens)
-* Token handle related events (authorization code, refresh token issued/redeemed/refreshed)
-* Permission revoked
-* Endpoint success/failures
-* Expired/invalid/no signing certificate
-* Unhandled exceptions and internal errors
-* CSP errors reported by the browser. See [CSP](../advanced/csp.html) for more information.
+IdentityServer 会在运行的时候触发许多事件，比如：
 
-By default these events are forwarded to the configured log provider -
-a custom event service can process or forward them in any way suitable for the environment.
+* 成功/失败的验证 (resource owner flow, pre, partial, local and external)
+* Token 的颁发 (identity, access, refresh tokens)
+* Token 处理相关事件 (authorization code, refresh token issued/redeemed/refreshed)
+* 权限撤销
+* 端点成功/失败
+* 过期/失效/没有签名证书
+* 未处理的异常和内部错误
+* 浏览器报告的 CSP 错误。参见 [CSP](../advanced/csp.html) 获取更多信息。
 
-## Configuring events
-The `EventsOptions` class has the following settings (all default to `false`):
+默认情况，这些默认的事件都将会被转发给配置的日志提供商——自定义的事件服务可根据环境情况任意处理或者转发它们。
 
+## 配置事件 (Configuring events)
+
+`EventsOptions` 类有以下设置（默认为 `false`）：
 * `RaiseSuccessEvents`
-    * e.g. refresh token refreshed or authentication success
+    * 比如，refresh token 被更新或者验证成功
 * `RaiseFailureEvents`
-    * e.g. authentication failure, authorization code redeem failure
+    * 比如，验证失败，验证码兑换失败。
 * `RaiseErrorEvents`
-    * e.g. unhandled exceptions
+    * 比如，未处理的异常
 * `RaiseInformationEvents`
-    * e.g. token issued or certificate valid
-    * e.g. token issued or certificate valid
+    * 比如，token 颁发或者证书验证
     
-See [here](http://leastprivilege.com/2015/10/22/identityserver3-logging-monitoring-using-serilog-and-seq/) for a post about logging and eventing.
+参见 [这里](http://leastprivilege.com/2015/10/22/identityserver3-logging-monitoring-using-serilog-and-seq/) 获取更多关于日志和事件相关信息。
