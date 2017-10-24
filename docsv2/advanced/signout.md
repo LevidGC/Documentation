@@ -2,13 +2,15 @@
 layout: docs-default
 ---
 
-# Signout Support
+> [原文](https://identityserver.github.io/Documentation/docsv2/advanced/signout.html)
 
-When a user signs out of IdentityServer it is possible that client applications that the user has signed into want to be notified that the user is no longer logged in.
+# 登出支持 (Signout Support)
 
-IdentityServer supports two styles of signout notifications. These styles coorespond to two (of the three) different OpenID Connection session management specifications: the [session management](https://openid.net/specs/openid-connect-session-1_0.html) and the [HTTP-based logout](https://openid.net/specs/openid-connect-logout-1_0.html) specifications. One is designed for client-side JavaScript-based applications, and the other is designed for server-side web applications (ASP.NET, etc). 
+当用户登出 IdentityServer 的时候，应该尽可能通知用户登录的应用用户现在已经登出了。
 
-More info for support in IdentityServer for each can be found here:
+IdentityServer 支持两种形式的登出通知。这些风格对应的是两种（三个）不同的 OpenID Connect 会话管理规范：[会话管理](https://openid.net/specs/openid-connect-session-1_0.html) 和 [基于 HTTP 的登出](https://openid.net/specs/openid-connect-logout-1_0.html) 规范。一个对应于基于 JavaScript 的客户端应用，另一个对应的是服务器端 Web 应用（ASP.NET 等等）。
 
-* [Client-side JavaScript-based applications](signout-session.html)
-* [Server-side web applications](signout-http.html)
+更多 IdentityServer 相关的支持参见这里：
+
+* [基于 JavaScript 的客户端应用](signout-session.html)
+* [服务器端 Web 应用](signout-http.html)
