@@ -2,13 +2,14 @@
 layout: docs-default
 ---
 
-# Session management for client-side JavaScript-based applications
+> [原文](https://identityserver.github.io/Documentation/docsv2/advanced/signout-session.html)
 
-The [Session management](https://openid.net/specs/openid-connect-session-1_0.html) specification defines a mechanism for an OpenID Connect provider to inform client-side JavaScript-based applications that a user has signed out. 
+# 基于 JavaScript 的客户端应用会话管理 (Session management for client-side JavaScript-based applications)
 
-The mechanism defined in the specification involves the JavaScript application opening an `<iframe>` to the OpenID Connect provider's "check\_session\_iframe" (whose value should be accessible from the metadata endpoint). This `<iframe>` (given that it is from the OP's origin) can access the cookies managed by the OP and can detect when the user's login session has changed (meaning the user has signed out, or has signed in as another user). 
+[会话管理](https://openid.net/specs/openid-connect-session-1_0.html) 规范为 OpenID Connect 提供商提供了通知基于 JavaScript 的客户端用户登出的通知机制。
 
-The JavaScript client application can periodically use `postMessage` to the `<iframe>` to ask if there have been any changes to the user's session. The `<iframe>` will reply with either `"changed"` or `"unchanged"`. If "changed" is the response, the JavaScript application then knows that the user's session has ended (or changed in some way) and can then perform any cleanup necessary.
+规范中定义的机制需要 JavaScript 应用打开一个连接到 OpenID Connect 提供商 "check\_session\_iframe" （它的值在元数据端点可以获取到）的 `<iframe>` 。这个 `<iframe>` 可以获取到由 OP 管理的 cookie （鉴于它和 OP 同源）并能侦测到用户登录会话的更改（意味着用户已经登出了或者有另一个用于已登录）。
 
+JavaScript 客户端应用可以定期在 `<iframe>` 中使用 `postMessage` 来询问用户的会话是否发生更改。而 `<iframe>` 会回复 `"changed"` 或者 `"unchanged"` 。如果响应是 "changed" ，那么 JavaScript 应用就会知道用户的会话已经结束了（或者通过某种方式更改了），然后再执行必要的清理工作。
 
-**To use this technique for signout notification, consult the sample JavaScript application [here](https://github.com/IdentityServer/IdentityServer3.Samples/tree/master/source/Clients/JavaScriptImplicitClient).**
+**想要在登出通知上应用此技术，参照 [这里](https://github.com/IdentityServer/IdentityServer3.Samples/tree/master/source/Clients/JavaScriptImplicitClient) 的JavaScript 应用样例 **
